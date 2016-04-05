@@ -31,6 +31,10 @@ __END__
 @@index
 %html
   %head
+    :css
+      #main_table td:nth-of-type(1) {
+        text-align: right;
+      }
     :javascript
       function foreach_selector(selector, func) {
         var elems = document.querySelectorAll(selector);
@@ -51,11 +55,21 @@ __END__
       }
   %body
     %form{:action => '/upload', :method => 'POST', :enctype => 'multipart/form-data'}
-      %input{:type => 'file', :name => 'file'}
-      %select{:name => 'output_type', :onChange => 'show_one_conf_only(this);'}
-        %option{:value => 'html'} html
-        %option{:value => 'docx'} word
-      %input{:type => 'submit', :value => 'upload'}
+      %table{:id => 'main_table'}
+        %tr
+          %td markdown file
+          %td
+            %input{:type => 'file', :name => 'file'}
+        %tr
+          %td output type
+          %td
+            %select{:name => 'output_type', :onChange => 'show_one_conf_only(this);'}
+              %option{:value => 'html'} html
+              %option{:value => 'docx'} word
+        %tr
+          %td
+          %td
+            %input{:type => 'submit', :value => 'upload'}
       %input{:type => 'hidden', :name => '_method', :value => 'put'}
     %div{:class => 'html_conf'} configuration of html
     %div{:class => 'docx_conf', :style => 'display:none'} configuration of docx
