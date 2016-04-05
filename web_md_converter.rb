@@ -55,7 +55,7 @@ __END__
       }
   %body
     %form{:action => '/upload', :method => 'POST', :enctype => 'multipart/form-data'}
-      %table{:id => 'main_table'}
+      %table#main_table
         %tr
           %td markdown file
           %td
@@ -71,5 +71,5 @@ __END__
           %td
             %input{:type => 'submit', :value => 'upload'}
       %input{:type => 'hidden', :name => '_method', :value => 'put'}
-    %div{:class => 'html_conf'} configuration of html
-    %div{:class => 'docx_conf', :style => 'display:none'} configuration of docx
+    %div.html_conf configuration of html
+    %div.docx_conf{:style => 'display:none'} configuration of docx
