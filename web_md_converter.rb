@@ -1,10 +1,8 @@
 require 'sinatra'
 require 'sinatra/reloader'
-require 'fileutils'
+require 'tempfile'
 
 set :bind, '0.0.0.0'
-
-base_name = "work/temp"
 
 get '/' do
   haml :index
@@ -14,7 +12,6 @@ put '/upload' do
   if params[:file]
     content_type params[:file][:type]
     f = params[:file][:tempfile]
-    FileUtils.cp(f.path, base_name)
     case params[:output_type]
     when 'html' then
       content_type 'text/html'
@@ -22,9 +19,10 @@ put '/upload' do
       content_type 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     end
     
-    output_file = base_name + '.' + params[:output_type] 
-    `pandoc -o #{output_file} #{base_name}`
-    File.read(output_file)
+    Tempfile.open('temp.' + params[:output_type]) do |file|
+      `pandoc -o #{file.path} #{f.path}`
+      file.read file.size
+    end
   end
 end
 
