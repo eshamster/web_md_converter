@@ -6,7 +6,7 @@ get '/' do
   haml :index
 end
 
-put '/upload' do
+post '/convert' do
   if params[:file]
     content_type params[:file][:type]
     f = params[:file][:tempfile]
