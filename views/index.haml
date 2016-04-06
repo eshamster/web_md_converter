@@ -1,9 +1,6 @@
 %html
   %head
-    :css
-      #main_table td:nth-of-type(1) {
-        text-align: right;
-      }
+    %link{:rel => 'stylesheet', :href => './index.css'}
     %script{:type => 'text/javascript', :src => './index.js'}
   %body
     %form{:action => '/upload', :method => 'POST', :enctype => 'multipart/form-data'}
