@@ -1,0 +1,24 @@
+%html
+  %head
+    %link{:rel => 'stylesheet', :href => './index.css'}
+    %script{:type => 'text/javascript', :src => './index.js'}
+  %body
+    %form{:action => '/upload', :method => 'POST', :enctype => 'multipart/form-data'}
+      %table#main_table
+        %tr
+          %td markdown file
+          %td
+            %input{:type => 'file', :name => 'file'}
+        %tr
+          %td output type
+          %td
+            %select{:name => 'output_type', :onChange => 'show_one_conf_only(this);'}
+              %option{:value => 'html'} html
+              %option{:value => 'docx'} word
+        %tr
+          %td
+          %td
+            %input{:type => 'submit', :value => 'upload'}
+      %input{:type => 'hidden', :name => '_method', :value => 'put'}
+    %div.html_conf configuration of html
+    %div.docx_conf{:style => 'display:none'} configuration of docx
