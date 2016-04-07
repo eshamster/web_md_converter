@@ -23,3 +23,29 @@ post '/convert' do
     end
   end
 end
+
+# --- templates --- #
+
+get '/templates' do
+  "not implemented"
+end
+
+post '/templates' do
+  "not implemnted"
+end
+
+put '/templates' do
+  "not implemnted"
+end
+
+delete '/templates' do
+  "not implemnted"
+end
+
+
+# --- template lists --- #
+
+get '/template_lists' do
+  "not implemented"
+end
+
