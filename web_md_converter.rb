@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'tempfile'
+require_relative 'type_manager'
 
 get '/' do
   haml :index
@@ -10,18 +11,19 @@ post '/convert' do
   if params[:file]
     content_type params[:file][:type]
     f = params[:file][:tempfile]
-    case params[:output_type]
-    when 'html' then
-      content_type 'text/html'
-    when 'docx' then
-      content_type 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    end
+    type_manager = TypeManager::Base::create(params[:output_type])
+    content_type type_manager.content_type
     
-    Tempfile.open('temp.' + params[:output_type]) do |file|
+    Tempfile.open('temp.' + type_manager.specifier) do |file|
       `pandoc -o #{file.path} #{f.path}`
       file.read file.size
     end
   end
+end
+
+get '/test' do
+  manager = TypeManager::Html.new()
+  manager.content_type + ", " + manager.specifier + ", " + manager.make_pandoc_opts([])
 end
 
 # --- templates --- #
