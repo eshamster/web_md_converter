@@ -12,11 +12,17 @@ class TemplateManager
       end
     end
 
-    def get_templates_list(type = '', base_dir = @@base_dir)
-      
+    def get_templates_list(type: '', base_dir: @@base_dir)
+      dir_path = "#{base_dir}/#{type}"
+      if FileTest.exist?(dir_path)
+        return Dir.entries(dir_path).reject{|e| [".", ".."].include?(e)}
+      else
+        raise StandardError, "The directory #{dir_path} is not found"
+      end
     end
 
     def add_new_template(file, type, specifier, base_dir = @@base_dir)
+      raise NotImplementedError.new("")
     end
   end
 end

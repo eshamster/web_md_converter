@@ -50,4 +50,17 @@ class TestTemplateManager < Test::Unit::TestCase
                                         specifier: 'not_exist', base_dir: @@dst_dir) 
     end
   end
+
+  test 'Test get_templates_list' do
+    assert_equal(TemplateManager::get_templates_list(type: 'html', base_dir: @@dst_dir).sort,
+                 ['test1.css', 'test2.css', 'test3.css'])
+    assert_equal(TemplateManager::get_templates_list(type: 'word', base_dir: @@dst_dir).sort,
+                 ['test1.dotx', 'test2.dotx'])
+  end
+
+  test 'Test error of get_templates_list' do
+    assert_raise(StandardError) do
+      TemplateManager::get_templates_list(type: 'not_exist', base_dir: @@dst_dir)
+    end
+  end
 end
