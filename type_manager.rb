@@ -1,3 +1,5 @@
+require_relative './template_manager'
+
 module TypeManager
   class Base
     attr_reader :content_type, :specifier
