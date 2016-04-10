@@ -49,11 +49,16 @@ class TestTemplateManager < Test::Unit::TestCase
   end
 
   # ---------- #
+  def compare_templates_list(got, expected)
+    assert_equal(got.length, expected.length)
+    got.each { |key, value| assert_equal(value.sort, expected[key].sort) }
+  end
+
   test 'Test get_templates_list' do
-    assert_equal(TemplateManager::get_templates_list(type: 'html', base_dir: @@dst_dir).sort,
-                 ['test1.css', 'test2.css', 'test3.css'])
-    assert_equal(TemplateManager::get_templates_list(type: 'word', base_dir: @@dst_dir).sort,
-                 ['test1.dotx', 'test2.dotx'])
+    compare_templates_list(TemplateManager::get_templates_list(type: 'html', base_dir: @@dst_dir),
+                 { 'html' => ['test1.css', 'test2.css', 'test3.css'] })
+    compare_tempates_list(TemplateManager::get_templates_list(type: 'word', base_dir: @@dst_dir),
+                 { 'word' => ['test1.dotx', 'test2.dotx'] })
   end
 
   test 'Test error of get_templates_list' do
