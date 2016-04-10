@@ -27,10 +27,27 @@ class TestTemplateManager < Test::Unit::TestCase
   setup :create_base_dir
   teardown :delete_base_dir
   
-  test 'test' do
-    puts `find test/temp -type f`
+  test 'Test search_file_path' do
+    assert_equal(TemplateManager::search_file_path(type: 'html', name: 'test1', 
+                                                   specifier: 'css', base_dir: @@dst_dir), 
+                 "#{@@dst_dir}/html/test1.css")
+    assert_equal(TemplateManager::search_file_path(type: 'word', name: 'test2', 
+                                                   specifier: 'dotx', base_dir: @@dst_dir), 
+                 "#{@@dst_dir}/word/test2.dotx")
   end
-  test 'test2' do
-    puts 234
+
+  test 'Test error of search_file_path' do
+    assert_raise(StandardError) do
+      TemplateManager::search_file_path(type: 'not_exist', name: 'test1', 
+                                        specifier: 'css', base_dir: @@dst_dir) 
+    end
+    assert_raise(StandardError) do
+      TemplateManager::search_file_path(type: 'html', name: 'not_exist', 
+                                        specifier: 'css', base_dir: @@dst_dir) 
+    end
+    assert_raise(StandardError) do
+      TemplateManager::search_file_path(type: 'html', name: 'test1', 
+                                        specifier: 'not_exist', base_dir: @@dst_dir) 
+    end
   end
 end
