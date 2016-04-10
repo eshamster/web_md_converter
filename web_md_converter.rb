@@ -1,7 +1,9 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'tempfile'
+require 'json'
 require_relative 'type_manager'
+require_relative 'template_manager'
 
 get '/' do
   haml :index
@@ -29,7 +31,8 @@ end
 # --- templates --- #
 
 get '/templates' do
-  "not implemented"
+  p TemplateManager::get_templates_list.to_json
+  return TemplateManager::get_templates_list.to_json
 end
 
 post '/templates' do

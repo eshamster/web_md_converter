@@ -16,9 +16,14 @@
               %option{:value => 'html'} html
               %option{:value => 'docx'} word
         %tr
+          %td template_name
+          %td
+            %select#template_selector{:name => 'template'}
+        %tr
           %td
           %td
             %input{:type => 'submit', :value => 'convert'}
       %input{:type => 'hidden', :name => '_method', :value => 'post'}
     %div.html_conf configuration of html
     %div.docx_conf{:style => 'display:none'} configuration of docx
+    %script{:type => 'text/javascript'} update_template_selector('html');
