@@ -57,7 +57,7 @@ class TestTemplateManager < Test::Unit::TestCase
   test 'Test get_templates_list' do
     compare_templates_list(TemplateManager::get_templates_list(type: 'html', base_dir: @@dst_dir),
                  { 'html' => ['test1.css', 'test2.css', 'test3.css'] })
-    compare_tempates_list(TemplateManager::get_templates_list(type: 'word', base_dir: @@dst_dir),
+    compare_templates_list(TemplateManager::get_templates_list(type: 'word', base_dir: @@dst_dir),
                  { 'word' => ['test1.dotx', 'test2.dotx'] })
   end
 
