@@ -3,8 +3,8 @@ class TemplateManager
   @@base_dir = File.dirname(__FILE__) + '/templates'
   
   class << self
-    def search_file_path(type:, name:, specifier:, base_dir: @@base_dir)
-      path_name = "#{base_dir}/#{type}/#{name}.#{specifier}"
+    def search_file_path(type:, name:, base_dir: @@base_dir)
+      path_name = "#{base_dir}/#{type}/#{name}"
       if FileTest.exist?(path_name)
         return path_name
       else
