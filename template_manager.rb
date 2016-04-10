@@ -13,16 +13,31 @@ class TemplateManager
     end
 
     def get_templates_list(type: '', base_dir: @@base_dir)
-      dir_path = "#{base_dir}/#{type}"
-      if FileTest.exist?(dir_path)
-        return { type => Dir.entries(dir_path).reject{|e| e.start_with?(".")} }
+      if type == ''
+        dir_list = get_real_entries(base_dir)
+        result = {}
+        dir_list.each { |dir|
+          result[dir] = get_real_entries("#{base_dir}/#{dir}")
+        }
+        return result
       else
-        raise StandardError, "The directory #{dir_path} is not found"
+        dir_path = "#{base_dir}/#{type}"
+        if FileTest.exist?(dir_path)
+          return { type => get_real_entries(dir_path) }
+        else
+          raise StandardError, "The directory #{dir_path} is not found"
+        end
       end
     end
 
     def add_new_template(file, type, specifier, base_dir = @@base_dir)
       raise NotImplementedError.new("")
+    end
+
+    private
+    
+    def get_real_entries(dir_path)
+      Dir.entries(dir_path).reject{|e| e.start_with?(".")}
     end
   end
 end
