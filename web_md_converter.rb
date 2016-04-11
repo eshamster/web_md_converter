@@ -31,7 +31,6 @@ end
 # --- templates --- #
 
 get '/templates' do
-  p TemplateManager::get_templates_list.to_json
   return TemplateManager::get_templates_list.to_json
 end
 
