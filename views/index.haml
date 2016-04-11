@@ -12,7 +12,7 @@
         %tr
           %td output type
           %td
-            %select{:name => 'output_type', :onChange => 'show_one_conf_only(this);'}
+            %select{:name => 'output_type', :onChange => 'do_after_switch_type(this.value);'}
               %option{:value => 'html'} html
               %option{:value => 'docx'} word
         %tr

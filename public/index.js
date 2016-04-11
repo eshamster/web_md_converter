@@ -11,11 +11,16 @@ function hide_all_conf () {
     });
 }
 
-function show_one_conf_only (elem) {
+function show_one_conf_only (target_type) {
     hide_all_conf();
-    foreach_selector('.' + elem.value + '_conf', function(conf) {
+    foreach_selector('.' + target_type + '_conf', function(conf) {
         conf.style.display = '';
     });
+}
+
+function do_after_switch_type (after_type) {
+    show_one_conf_only(after_type);
+    update_template_selector(after_type);
 }
 
 var templates_list = null; // as json
