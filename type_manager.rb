@@ -24,9 +24,14 @@ module TypeManager
       @content_type = 'text/html'
       @specifier = 'html'
     end
-
+    
     def make_pandoc_opts(params)
-      "not implemented"
+      result = "-s --self-contained -t html5"
+      if ! params[:template].empty?
+        path = TemplateManager::search_file_path(type: 'html', name: params[:template])
+        result += " -c #{path}"
+      end
+      return result
     end
   end
 

@@ -15,9 +15,8 @@ post '/convert' do
     f = params[:file][:tempfile]
     type_manager = TypeManager::Base::create(params[:output_type])
     content_type type_manager.content_type
-    
     Tempfile.open('temp.' + type_manager.specifier) do |file|
-      `pandoc -o #{file.path} #{f.path}`
+      `pandoc -o #{file.path} #{type_manager.make_pandoc_opts(params)} #{f.path}`
       file.read file.size
     end
   end
