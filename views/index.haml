@@ -3,7 +3,7 @@
     %link{:rel => 'stylesheet', :href => './index.css'}
     %script{:type => 'text/javascript', :src => './index.js'}
   %body
-    %form{:action => '/upload', :method => 'POST', :enctype => 'multipart/form-data'}
+    %form{:action => '/convert', :method => 'POST', :enctype => 'multipart/form-data'}
       %table#main_table
         %tr
           %td markdown file
@@ -12,13 +12,18 @@
         %tr
           %td output type
           %td
-            %select{:name => 'output_type', :onChange => 'show_one_conf_only(this);'}
+            %select{:name => 'output_type', :onChange => 'do_after_switch_type(this.value);'}
               %option{:value => 'html'} html
               %option{:value => 'docx'} word
         %tr
+          %td template_name
+          %td
+            %select#template_selector{:name => 'template'}
+        %tr
           %td
           %td
-            %input{:type => 'submit', :value => 'upload'}
-      %input{:type => 'hidden', :name => '_method', :value => 'put'}
+            %input{:type => 'submit', :value => 'convert'}
+      %input{:type => 'hidden', :name => '_method', :value => 'post'}
     %div.html_conf configuration of html
     %div.docx_conf{:style => 'display:none'} configuration of docx
+    %script{:type => 'text/javascript'} update_template_selector('html');

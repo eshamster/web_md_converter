@@ -1,0 +1,1 @@
+This is dummy file to make sure that the TemplateManager::get_templates_list ignores files whose name starts with "."
