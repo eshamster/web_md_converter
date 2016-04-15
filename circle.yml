@@ -6,3 +6,6 @@ dependencies:
         2) rvm use 2.3.0 --default ;;
       esac
     - ruby -v
+test:
+  override:
+    - bundle exec rake test
