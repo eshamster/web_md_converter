@@ -10,7 +10,7 @@ module TypeManager
         case type
         when 'html' then
           return Html.new()
-        when 'docx' then
+        when 'word' then
           return Word.new()
         else
           raise ArgumentError, "The type '#{type}' is not implemented"
