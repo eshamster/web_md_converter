@@ -10,7 +10,7 @@ module TypeManager
         case type
         when 'html' then
           return Html.new()
-        when 'docx' then
+        when 'word' then
           return Word.new()
         else
           raise ArgumentError, "The type '#{type}' is not implemented"
@@ -27,7 +27,7 @@ module TypeManager
     
     def make_pandoc_opts(params)
       result = "-s --self-contained -t html5"
-      if ! params[:template].empty?
+      if params[:template] && ! params[:template].empty?
         path = TemplateManager::search_file_path(type: 'html', name: params[:template])
         result += " -c #{path}"
       end
@@ -42,7 +42,6 @@ module TypeManager
     end
 
     def make_pandoc_opts(params)
-      "not implemented"
     end
   end
 end

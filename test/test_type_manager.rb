@@ -4,7 +4,7 @@ require_relative '../type_manager'
 class TestTypeManager < Test::Unit::TestCase
   sub_test_case 'Test the factory and readers of each TypeManager' do
     data('Html' => ['html', 'text/html', 'html'],
-         'Word' => ['docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'docx'])
+         'Word' => ['word', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'docx'])
     def test_use_data(data)
       manager_type, content_type, specifier = data
       manager = TypeManager::Base::create(manager_type)

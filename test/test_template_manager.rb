@@ -1,28 +1,9 @@
 require 'test/unit'
-require 'fileutils'
 require_relative '../template_manager.rb'
-
-module PrepareMethods
-  @@base_dir = File.dirname(__FILE__) + '/temp'
-  @@src_dir = File.dirname(__FILE__) + '/resource/templates'
-  @@dst_dir = @@base_dir + '/templates'
-
-  def create_base_dir
-    unless FileTest.exist?(@@base_dir)
-      FileUtils.mkdir_p(@@base_dir)
-      FileUtils.cp_r(@@src_dir, @@dst_dir)
-    else
-      raise "The temp directory '#{@@base_dir}' is already exist"
-    end
-  end
-
-  def delete_base_dir
-    FileUtils.rm_r(@@base_dir) if FileTest.exist?(@@base_dir)
-  end
-end
+require_relative 'utils.rb'
 
 class TestTemplateManager < Test::Unit::TestCase
-  include PrepareMethods
+  include PrepareResourceMethods
 
   setup :create_base_dir
   teardown :delete_base_dir
@@ -30,21 +11,21 @@ class TestTemplateManager < Test::Unit::TestCase
   # ---------- #
   test 'Test search_file_path' do
     assert_equal(TemplateManager::search_file_path(type: 'html', name: 'test1.css', 
-                                                   base_dir: @@dst_dir), 
-                 "#{@@dst_dir}/html/test1.css")
+                                                   base_dir: @@template_dir), 
+                 "#{@@template_dir}/html/test1.css")
     assert_equal(TemplateManager::search_file_path(type: 'word', name: 'test2.dotx', 
-                                                   base_dir: @@dst_dir), 
-                 "#{@@dst_dir}/word/test2.dotx")
+                                                   base_dir: @@template_dir), 
+                 "#{@@template_dir}/word/test2.dotx")
   end
 
   test 'Test error of search_file_path' do
     assert_raise(StandardError) do
       TemplateManager::search_file_path(type: 'not_exist', name: 'test1.css',
-                                        base_dir: @@dst_dir) 
+                                        base_dir: @@template_dir) 
     end
     assert_raise(StandardError) do
       TemplateManager::search_file_path(type: 'html', name: 'not_exist', 
-                                        base_dir: @@dst_dir) 
+                                        base_dir: @@template_dir) 
     end
   end
 
@@ -55,18 +36,18 @@ class TestTemplateManager < Test::Unit::TestCase
   end
 
   test 'Test get_templates_list' do
-    compare_templates_list(TemplateManager::get_templates_list(type: 'html', base_dir: @@dst_dir),
+    compare_templates_list(TemplateManager::get_templates_list(type: 'html', base_dir: @@template_dir),
                  { 'html' => ['test1.css', 'test2.css', 'test3.css'] })
-    compare_templates_list(TemplateManager::get_templates_list(type: 'word', base_dir: @@dst_dir),
+    compare_templates_list(TemplateManager::get_templates_list(type: 'word', base_dir: @@template_dir),
                  { 'word' => ['test1.dotx', 'test2.dotx'] })
-    compare_templates_list(TemplateManager::get_templates_list(base_dir: @@dst_dir),
+    compare_templates_list(TemplateManager::get_templates_list(base_dir: @@template_dir),
                  { 'html' => ['test1.css', 'test2.css', 'test3.css'], 
                    'word' => ['test1.dotx', 'test2.dotx'] })
   end
 
   test 'Test error of get_templates_list' do
     assert_raise(StandardError) do
-      TemplateManager::get_templates_list(type: 'not_exist', base_dir: @@dst_dir)
+      TemplateManager::get_templates_list(type: 'not_exist', base_dir: @@template_dir)
     end
   end
 end
