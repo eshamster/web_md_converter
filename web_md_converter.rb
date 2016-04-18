@@ -9,16 +9,32 @@ get '/' do
   haml :index
 end
 
+helpers do
+  def check_required_params_to_convert(params)
+    # TODO: Check if the content of the params[:file] is a markdown file
+    return params[:file] && params[:output_type]
+  end
+end
+
 post '/convert' do
-  if params[:file]
+  if check_required_params_to_convert(params) 
     content_type params[:file][:type]
     f = params[:file][:tempfile]
-    type_manager = TypeManager::Base::create(params[:output_type])
+    begin
+      type_manager = TypeManager::Base::create(params[:output_type])
+    rescue ArgumentError => e
+      status 400
+      body e.message
+      return
+    end
     content_type type_manager.content_type
     Tempfile.open('temp.' + type_manager.specifier) do |file|
       `pandoc -o #{file.path} #{type_manager.make_pandoc_opts(params)} #{f.path}`
       file.read file.size
     end
+  else
+    status 400
+    body 'The parameters, "file" (a markdown file) and "output_type" (string), is required'
   end
 end
 

@@ -40,5 +40,18 @@ class WebMdConverter < Test::Unit::TestCase
       assert last_response.ok?
       assert_equal content_type, last_response.header["Content-Type"]
     end
+
+    def test_error_invalid_file
+      type = 'html'
+      post "convert", "output_type" => type
+      assert_equal 400, last_response.status
+    end
+
+    def test_error_invalid_output_type
+      post "convert", "file" => sample_md()
+      assert_equal 400, last_response.status
+      post "convert", "file" => sample_md(), "output_type" => 'not_exist_type'
+      assert_equal 400, last_response.status
+    end
   end
 end
