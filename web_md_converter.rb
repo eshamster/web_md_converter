@@ -10,14 +10,13 @@ get '/' do
 end
 
 helpers do
-  def check_required_params_to_convert(params)
-    # TODO: Check if the content of the params[:file] is a markdown file
-    return params[:file] && params[:output_type]
+  def check_required_params(params, *required)
+    return required.all? { |name| params[name] }
   end
 end
 
 post '/convert' do
-  if check_required_params_to_convert(params) 
+  if check_required_params(params, :file, :output_type) 
     content_type params[:file][:type]
     f = params[:file][:tempfile]
     begin
