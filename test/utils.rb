@@ -18,5 +18,5 @@ module PrepareResourceMethods
 
   private
 
-  @@src_dir = File.dirname(__FILE__) + '/resource'
+  @@src_dir = File.dirname(__FILE__) + '/_resource'
 end
