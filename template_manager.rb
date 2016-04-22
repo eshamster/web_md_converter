@@ -25,6 +25,18 @@ class TemplateManager
       raise NotImplementedError.new("")
     end
 
+    def get_template(type, specifier, base_dir = @@base_dir)
+      raise NotImplementedError.new("")
+    end
+
+    def update_template(file, type, specifier, base_dir = @@base_dir)
+      raise NotImplementedError.new("")
+    end
+
+    def delete_template(type, specifier, base_dir = @@base_dir)
+      raise NotImplementedError.new("")
+    end
+
     private
 
     def get_templates_of_type(base_dir, type)
