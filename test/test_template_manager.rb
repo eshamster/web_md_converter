@@ -30,11 +30,6 @@ class TestTemplateManager < Test::Unit::TestCase
   end
 
   # ---------- #
-  def compare_templates_list(got, expected)
-    assert_equal(got.length, expected.length)
-    got.each { |key, value| assert_equal(value.sort, expected[key].sort) }
-  end
-
   test 'Test get_templates_list' do
     compare_templates_list(TemplateManager::get_templates_list(type: 'html', base_dir: @@template_dir),
                  { 'html' => ['test1.css', 'test2.css', 'test3.css'] })
@@ -50,4 +45,35 @@ class TestTemplateManager < Test::Unit::TestCase
       TemplateManager::get_templates_list(type: 'not_exist', base_dir: @@template_dir)
     end
   end
+
+  # ---------- #
+  test 'Test add' do
+    type = 'html'
+    new_name = 'test_new.css'
+    check_new = ->() { TemplateManager::get_templates_list(base_dir: @@template_dir)[type].include?(new_name) }
+    assert ! check_new.call
+    TemplateManager::add(src_path: @@css_path_for_add,
+                         type: 'html', dst_name: 'test_new.css',
+                         base_dir: @@template_dir)
+    assert check_new.call
+  end
+
+  test 'Test error of add_new_template' do
+    assert_raise(StandardError) do
+      # Try to override a existing file (not allowed)
+      TemplateManager::add(src_path: @@css_path_for_add,
+                           type: 'html', dst_name: 'test1.css',
+                           base_dir: @@template_dir)
+    end
+  end
+
+  # ----- private ----- #
+  private
+
+  def compare_templates_list(got, expected)
+    assert_equal(got.length, expected.length)
+    got.each { |key, value| assert_equal(value.sort, expected[key].sort) }
+  end
+
+  @@css_path_for_add = "#{@@base_dir}/css_for_add.css"
 end

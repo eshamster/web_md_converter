@@ -1,10 +1,12 @@
+require 'fileutils'
+
 class TemplateManager
   private_class_method :new
   @@base_dir = File.dirname(__FILE__) + '/templates'
   
   class << self
     def search_file_path(type:, name:, base_dir: @@base_dir)
-      path_name = "#{base_dir}/#{type}/#{name}"
+      path_name = create_path(base_dir, type, name)
       if FileTest.exist?(path_name)
         return path_name
       else
@@ -21,8 +23,17 @@ class TemplateManager
       return result
     end
 
-    def add_new_template(file, type, specifier, base_dir = @@base_dir)
-      raise NotImplementedError.new("")
+    def add(src_path:, type:, dst_name:, base_dir: @@base_dir)
+      # TODO: check if the type is valid
+      templates = get_templates_of_type(base_dir, type)
+      if templates.include?(dst_name)
+        raise StandardError, "The template '#{dst_name}' is already registered"
+      end
+      dst_path = create_path(base_dir, type, dst_name)
+      unless FileUtils.copy_file(src_path, dst_path, {:verbose => true})
+        raise StandardError, "The copy from #{src_path} to #{dst_path} is failed"
+      end
+      return true
     end
 
     def get_template(type, specifier, base_dir = @@base_dir)
@@ -38,6 +49,10 @@ class TemplateManager
     end
 
     private
+
+    def create_path(base_dir, type, name)
+      return "#{base_dir}/#{type}/#{name}"
+    end
 
     def get_templates_of_type(base_dir, type)
       return get_real_entries("#{base_dir}/#{type}")
