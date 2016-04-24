@@ -3,7 +3,7 @@
     %link{:rel => 'stylesheet', :href => './index.css'}
     %script{:type => 'text/javascript', :src => './index.js'}
   %body
-    %form{:action => '/convert', :method => 'POST', :enctype => 'multipart/form-data'}
+    %form{:name => 'main_form', :action => '/convert', :method => 'POST', :enctype => 'multipart/form-data'}
       %table#main_table
         %tr
           %td markdown file
@@ -19,11 +19,16 @@
           %td template_name
           %td
             %select#template_selector{:name => 'template'}
+            %button{:onClick => 'return get_template(this.form.output_type.value, this.form.template.value);'} Download
         %tr
           %td
           %td
             %input{:type => 'submit', :value => 'convert'}
       %input{:type => 'hidden', :name => '_method', :value => 'post'}
+    %form{:name => 'template_get_form', :action => '/templates', :method => 'GET'}
+      %input{:type => 'hidden', :name => 'type'}
+      %input{:type => 'hidden', :name => 'name'}
+      %input{:type => 'hidden', :name => '_method', :value => 'get'}
     %div.html_conf configuration of html
     %div.docx_conf{:style => 'display:none'} configuration of docx
     %script{:type => 'text/javascript'} update_template_selector('html');

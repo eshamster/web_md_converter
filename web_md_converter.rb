@@ -37,7 +37,7 @@ post '/convert' do
     end
   else
     status 400
-    body 'The parameters, "file" (a markdown file) and "output_type" (string), is required'
+    body 'The parameters, "file" (a markdown file) and "output_type" (string), are required'
   end
 end
 
@@ -49,6 +49,20 @@ end
 # --- templates --- #
 
 get '/templates' do
+  unless check_required_params(params, :type, :name)
+    status 400
+    body 'The parameters, "type" and "name" are required'
+    return
+  end
+
+  path = TemplateManager::get(type: params[:type], name: params[:name])
+  File.open(path) { |file|
+    # TODO: specify content_type
+    file.read file.size
+  }
+end
+
+get '/templates/lists' do
   return TemplateManager::get_templates_list.to_json
 end
 

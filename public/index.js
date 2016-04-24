@@ -33,6 +33,9 @@ function append_template_option(selector, name) {
 }
 
 function update_template_selector_impl(target) {
+    if (templates_list === null) {
+        return;
+    }
     var selector = document.querySelector('#template_selector');
     selector.textContent = null;
     append_template_option(selector, '');
@@ -48,7 +51,7 @@ function update_template_selector(target) {
     }
     else {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/templates', true);
+        xhr.open('GET', '/templates/lists', true);
         xhr.send();
         xhr.onreadystatechange = function(e) { 
             if (xhr.readyState == 4 && xhr.status == 200) {
@@ -56,5 +59,19 @@ function update_template_selector(target) {
             }
             update_template_selector_impl(target);
         }
+    }
+}
+
+function get_template(type, name) {
+    try {
+        var form = document.template_get_form;
+        form.type.value = type;
+        form.name.value = name;
+        form.submit();
+    }
+    finally {
+        // This function is assumed to be called in another form not in template_get_form.
+        // So it is needed to prevent executing submitting in the former form
+        return false;
     }
 }
