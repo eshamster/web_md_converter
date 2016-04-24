@@ -6,6 +6,14 @@ module TypeManager
     def make_pandoc_opts(params)
     end
     class << self 
+      def all_supported_types()
+        return ['html', 'word']
+      end
+
+      def is_valid?(type)
+        return all_supported_types.include?(type)
+      end
+      
       def create(type)
         case type
         when 'html' then
@@ -13,7 +21,11 @@ module TypeManager
         when 'word' then
           return Word.new()
         else
-          raise ArgumentError, "The type '#{type}' is not implemented"
+          unless is_valid?(type)
+            raise ArgumentError, "The type '#{type}' is not supported"
+          else
+            raise StandardError, "The type '#{type}' is not implemented"
+          end
         end
       end
     end

@@ -15,4 +15,10 @@ class TestTypeManager < Test::Unit::TestCase
       assert_raise(ArgumentError) { TypeManager::Base::create('not_exist'); }
     end
   end
+
+  test 'Test validation' do
+    existing_type = TypeManager::Base::all_supported_types[0]
+    assert TypeManager::Base::is_valid?(existing_type)
+    assert ! TypeManager::Base::is_valid?('not_exist')
+  end
 end

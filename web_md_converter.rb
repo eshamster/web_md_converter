@@ -25,6 +25,10 @@ post '/convert' do
       status 400
       body e.message
       return
+    rescue StandardError => e
+      status 500
+      body e.message
+      return
     end
     content_type type_manager.content_type
     Tempfile.open('temp.' + type_manager.specifier) do |file|
