@@ -50,12 +50,10 @@ class TestTemplateManager < Test::Unit::TestCase
   test 'Test add' do
     type = 'html'
     new_name = 'test_new.css'
-    check_new = ->() { TemplateManager::get_templates_list(base_dir: @@template_dir)[type].include?(new_name) }
-    assert ! check_new.call
     TemplateManager::add(src_path: @@css_path_for_add,
-                         type: 'html', dst_name: 'test_new.css',
+                         type: type, dst_name: new_name,
                          base_dir: @@template_dir)
-    assert check_new.call
+    assert template_is_exist?(type, new_name)
   end
 
   test 'Test error of add_new_template' do
@@ -67,8 +65,28 @@ class TestTemplateManager < Test::Unit::TestCase
     end
   end
 
+  test 'Test delete' do
+    type = 'html'
+    target_name = 'test1.css'
+    assert template_is_exist?(type, target_name)
+    TemplateManager::delete(type: type, name: target_name,
+                            base_dir: @@template_dir)
+    assert ! template_is_exist?(type, target_name)
+  end
+
+  test 'Test error of delete_new_template' do
+    assert_raise(StandardError) do
+      TemplateManager::delete(type: 'html', name: 'not_exist.css',
+                              base_dir: @@template_dir)
+    end
+  end
+  
   # ----- private ----- #
   private
+
+  def template_is_exist?(type, name)
+    return TemplateManager::get_templates_list(base_dir: @@template_dir)[type].include?(name)
+  end
 
   def compare_templates_list(got, expected)
     assert_equal(got.length, expected.length)

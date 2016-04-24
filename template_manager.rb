@@ -30,7 +30,7 @@ class TemplateManager
         raise StandardError, "The template '#{dst_name}' is already registered"
       end
       dst_path = create_path(base_dir, type, dst_name)
-      unless FileUtils.copy_file(src_path, dst_path, {:verbose => true})
+      unless FileUtils.copy_file(src_path, dst_path, true)
         raise StandardError, "The copy from #{src_path} to #{dst_path} is failed"
       end
       return true
@@ -44,8 +44,17 @@ class TemplateManager
       raise NotImplementedError.new("")
     end
 
-    def delete_template(type, specifier, base_dir = @@base_dir)
-      raise NotImplementedError.new("")
+    def delete(type:, name:, base_dir: @@base_dir)
+      # TODO: check if the type is valid
+      templates = get_templates_of_type(base_dir, type)
+      unless templates.include?(name)
+        raise StandardError, "The template '#{name}' is not registered"
+      end
+      path = create_path(base_dir, type, name)
+      unless FileUtils.rm(path)
+        raise StandardError, "Deletng #{path} is failed"
+      end
+      return true
     end
 
     private
