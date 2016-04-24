@@ -3,12 +3,13 @@ require_relative '../type_manager'
 
 class TestTypeManager < Test::Unit::TestCase
   sub_test_case 'Test the factory and readers of each TypeManager' do
-    data('Html' => ['html', 'text/html', 'html'],
-         'Word' => ['word', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'docx'])
+    data('Html' => ['html', 'text/html', 'text/css', 'html'],
+         'Word' => ['word', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.wordprocessingml.template', 'docx'])
     def test_use_data(data)
-      manager_type, content_type, specifier = data
+      manager_type, content_type, template_content_type, specifier = data
       manager = TypeManager::create(manager_type)
       assert_equal manager.content_type, content_type
+      assert_equal manager.template_content_type, template_content_type
       assert_equal manager.specifier, specifier
     end
     test 'Check error' do

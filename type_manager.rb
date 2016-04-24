@@ -29,7 +29,7 @@ module TypeManager
 
   # ----- Classes ----- #
   class Base
-    attr_reader :content_type, :specifier
+    attr_reader :content_type, :specifier, :template_content_type
     def make_pandoc_opts(params)
     end
   end
@@ -37,6 +37,7 @@ module TypeManager
   class Html < Base
     def initialize()
       @content_type = 'text/html'
+      @template_content_type = 'text/css'
       @specifier = 'html'
     end
     
@@ -52,7 +53,10 @@ module TypeManager
 
   class Word < Base
     def initialize()
-      @content_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      @content_type = 
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      @template_content_type = 
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.template'
       @specifier = 'docx'
     end
 
