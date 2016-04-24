@@ -70,7 +70,7 @@ class TemplateManager
 
     def get_templates_of_type(base_dir, type)
       unless TypeManager::is_valid?(type)
-        raise StandardError, "The type '#{type}' is invalide"
+        raise StandardError, "The type '#{type}' is invalid"
       end
       return get_real_entries("#{base_dir}/#{type}")
     end
