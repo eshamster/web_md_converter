@@ -63,8 +63,14 @@ class TestTemplateManager < Test::Unit::TestCase
                            type: 'html', dst_name: 'test1.css',
                            base_dir: @@template_dir)
     end
+    assert_raise(StandardError) do
+      TemplateManager::add(src_path: @@css_path_for_add,
+                           type: 'not_exist', dst_name: 'test_new.css',
+                           base_dir: @@template_dir)
+    end
   end
 
+  # ---------- #
   test 'Test delete' do
     type = 'html'
     target_name = 'test1.css'
@@ -77,6 +83,10 @@ class TestTemplateManager < Test::Unit::TestCase
   test 'Test error of delete_new_template' do
     assert_raise(StandardError) do
       TemplateManager::delete(type: 'html', name: 'not_exist.css',
+                              base_dir: @@template_dir)
+    end
+    assert_raise(StandardError) do
+      TemplateManager::delete(type: 'not_exist', name: 'test1.css',
                               base_dir: @@template_dir)
     end
   end

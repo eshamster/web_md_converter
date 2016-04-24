@@ -24,7 +24,6 @@ class TemplateManager
     end
 
     def add(src_path:, type:, dst_name:, base_dir: @@base_dir)
-      # TODO: check if the type is valid
       templates = get_templates_of_type(base_dir, type)
       if templates.include?(dst_name)
         raise StandardError, "The template '#{dst_name}' is already registered"
@@ -45,7 +44,6 @@ class TemplateManager
     end
 
     def delete(type:, name:, base_dir: @@base_dir)
-      # TODO: check if the type is valid
       templates = get_templates_of_type(base_dir, type)
       unless templates.include?(name)
         raise StandardError, "The template '#{name}' is not registered"
@@ -64,6 +62,9 @@ class TemplateManager
     end
 
     def get_templates_of_type(base_dir, type)
+      unless TypeManager::is_valid?(type)
+        raise StandardError, "The type '#{type}' is invalide"
+      end
       return get_real_entries("#{base_dir}/#{type}")
     end
     
