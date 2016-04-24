@@ -13,23 +13,27 @@ helpers do
   def check_required_params(params, *required)
     return required.all? { |name| params[name] }
   end
+
+  def create_type_manager(type)
+    begin
+      return TypeManager::create(type)
+    rescue ArgumentError => e
+      status 400
+      body e.message
+      return nil
+    rescue StandardError => e
+      status 500
+      body e.message
+      return nil
+    end
+  end
 end
 
 post '/convert' do
   if check_required_params(params, :file, :output_type) 
-    content_type params[:file][:type]
     f = params[:file][:tempfile]
-    begin
-      type_manager = TypeManager::create(params[:output_type])
-    rescue ArgumentError => e
-      status 400
-      body e.message
-      return
-    rescue StandardError => e
-      status 500
-      body e.message
-      return
-    end
+    type_manager = create_type_manager(params[:output_type]) || return
+    
     content_type type_manager.content_type
     Tempfile.open('temp.' + type_manager.specifier) do |file|
       `pandoc -o #{file.path} #{type_manager.make_pandoc_opts(params)} #{f.path}`
@@ -56,8 +60,10 @@ get '/templates' do
   end
 
   path = TemplateManager::get(type: params[:type], name: params[:name])
+
+  type_manager = create_type_manager(params[:type]) || return
   File.open(path) { |file|
-    # TODO: specify content_type
+    content_type type_manager.template_content_type
     file.read file.size
   }
 end
