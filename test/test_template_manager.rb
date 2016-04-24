@@ -71,6 +71,24 @@ class TestTemplateManager < Test::Unit::TestCase
   end
 
   # ---------- #
+  test 'Test get' do
+    path = TemplateManager::get(type: 'html', name: 'test1.css',
+                                base_dir: @@template_dir)
+    assert File.exist?(path)
+  end
+
+  test 'Test error of get' do
+    assert_raise(StandardError) do
+      TemplateManager::get(type: 'not_exist', name: 'test1.css',
+                           base_dir: @@template_dir)
+    end
+    assert_raise(StandardError) do
+      TemplateManager::get(type: 'html', name: 'not_exist',
+                           base_dir: @@template_dir)
+    end
+  end
+
+  # ---------- #
   test 'Test update' do
     # TODO: compare the content of the file between before and after
     type = 'html'

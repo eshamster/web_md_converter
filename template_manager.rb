@@ -35,8 +35,15 @@ class TemplateManager
       return true
     end
 
-    def get_template(type, specifier, base_dir = @@base_dir)
-      raise NotImplementedError.new("")
+    def get(type:, name:, base_dir: @@base_dir)
+      unless TypeManager::is_valid?(type)
+        raise StandardError, "The type '#{type}' is not supported"
+      end
+      path = create_path(base_dir, type, name)
+      unless File.exist?(path)
+        raise StandardError, "The template '#{name}' is not exist"
+      end
+      return path
     end
 
     def update(src_path:, type:, dst_name:, base_dir: @@base_dir)
