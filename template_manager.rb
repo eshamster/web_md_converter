@@ -23,9 +23,9 @@ class TemplateManager
       return result
     end
 
-    def add(src_path:, type:, dst_name:, base_dir: @@base_dir)
+    def add(src_path:, type:, dst_name:, base_dir: @@base_dir, overwrite: false)
       templates = get_templates_of_type(base_dir, type)
-      if templates.include?(dst_name)
+      if overwrite != templates.include?(dst_name)
         raise StandardError, "The template '#{dst_name}' is already registered"
       end
       dst_path = create_path(base_dir, type, dst_name)
@@ -39,8 +39,8 @@ class TemplateManager
       raise NotImplementedError.new("")
     end
 
-    def update_template(file, type, specifier, base_dir = @@base_dir)
-      raise NotImplementedError.new("")
+    def update(src_path:, type:, dst_name:, base_dir: @@base_dir)
+      add(src_path: src_path, type: type, dst_name: dst_name, base_dir: base_dir, overwrite: true)
     end
 
     def delete(type:, name:, base_dir: @@base_dir)

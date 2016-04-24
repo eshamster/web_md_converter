@@ -56,7 +56,7 @@ class TestTemplateManager < Test::Unit::TestCase
     assert template_is_exist?(type, new_name)
   end
 
-  test 'Test error of add_new_template' do
+  test 'Test error of add' do
     assert_raise(StandardError) do
       # Try to override a existing file (not allowed)
       TemplateManager::add(src_path: @@css_path_for_add,
@@ -67,6 +67,32 @@ class TestTemplateManager < Test::Unit::TestCase
       TemplateManager::add(src_path: @@css_path_for_add,
                            type: 'not_exist', dst_name: 'test_new.css',
                            base_dir: @@template_dir)
+    end
+  end
+
+  # ---------- #
+  test 'Test update' do
+    # TODO: compare the content of the file between before and after
+    type = 'html'
+    name = 'test1.css'
+    assert template_is_exist?(type, name)
+    TemplateManager::update(src_path: @@css_path_for_add,
+                            type: type, dst_name: name,
+                            base_dir: @@template_dir)
+    assert template_is_exist?(type, name)
+  end
+
+  test 'Test error of update' do
+    assert_raise(StandardError) do
+      # Try to override a existing file (not allowed)
+      TemplateManager::update(src_path: @@css_path_for_add,
+                              type: 'html', dst_name: 'not_exist.css',
+                              base_dir: @@template_dir)
+    end
+    assert_raise(StandardError) do
+      TemplateManager::update(src_path: @@css_path_for_add,
+                              type: 'not_exist', dst_name: 'test_new.css',
+                              base_dir: @@template_dir)
     end
   end
 
