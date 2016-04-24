@@ -20,7 +20,7 @@ post '/convert' do
     content_type params[:file][:type]
     f = params[:file][:tempfile]
     begin
-      type_manager = TypeManager::Base::create(params[:output_type])
+      type_manager = TypeManager::create(params[:output_type])
     rescue ArgumentError => e
       status 400
       body e.message
