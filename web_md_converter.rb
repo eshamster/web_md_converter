@@ -11,7 +11,13 @@ end
 
 helpers do
   def check_required_params(params, *required)
-    return required.all? { |name| params[name] }
+    if required.all? { |name| params[name] }
+      return true
+    else
+      status 400
+      body "Some required parameters are lack: #{required}"
+      return nil
+    end
   end
 
   def create_type_manager(type)
@@ -30,18 +36,15 @@ helpers do
 end
 
 post '/convert' do
-  if check_required_params(params, :file, :output_type) 
-    f = params[:file][:tempfile]
-    type_manager = create_type_manager(params[:output_type]) || return
-    
-    content_type type_manager.content_type
-    Tempfile.open('temp.' + type_manager.specifier) do |file|
-      `pandoc -o #{file.path} #{type_manager.make_pandoc_opts(params)} #{f.path}`
-      file.read file.size
-    end
-  else
-    status 400
-    body 'The parameters, "file" (a markdown file) and "output_type" (string), are required'
+  return unless check_required_params(params, :file, :output_type)
+
+  f = params[:file][:tempfile]
+  type_manager = create_type_manager(params[:output_type]) || return
+  
+  content_type type_manager.content_type
+  Tempfile.open('temp.' + type_manager.specifier) do |file|
+    `pandoc -o #{file.path} #{type_manager.make_pandoc_opts(params)} #{f.path}`
+    file.read file.size
   end
 end
 
@@ -53,11 +56,7 @@ end
 # --- templates --- #
 
 get '/templates' do
-  unless check_required_params(params, :type, :name)
-    status 400
-    body 'The parameters, "type" and "name" are required'
-    return
-  end
+  return unless check_required_params(params, :type, :name)
 
   path = TemplateManager::get(type: params[:type], name: params[:name])
 
