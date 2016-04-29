@@ -29,6 +29,12 @@
       %input{:type => 'hidden', :name => 'type'}
       %input{:type => 'hidden', :name => 'name'}
       %input{:type => 'hidden', :name => '_method', :value => 'get'}
+    %form{:name => 'template_post_form', :action => '/templates', :method => 'POST', :enctype => 'multipart/form-data'}
+      %div{} Upload a new template file
+      %input{:name => 'file', :type => 'file'}
+      %input{:type => 'hidden', :name => 'type'}
+      %input{:type => 'hidden', :name => 'name'}
+      %input{:type => 'submit', :value => 'Upload', :onClick => 'post_template()'}
     %div.html_conf configuration of html
     %div.docx_conf{:style => 'display:none'} configuration of docx
     %script{:type => 'text/javascript'} update_template_selector('html');

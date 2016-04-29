@@ -1,3 +1,7 @@
+#main_table {
+    border: 2px solid black;
+}
+
 #main_table td:nth-of-type(1) {
     text-align: right;
 }

@@ -75,3 +75,15 @@ function get_template(type, name) {
         return false;
     }
 }
+
+function post_template() {
+    try {
+        var form = document.template_post_form;
+        var main_form = document.main_form;
+        form.type.value = main_form.output_type.value;
+        form.name.value = form.file.value.split(/[\/\\]/).pop();
+    }
+    finally {
+        return false;
+    }
+}

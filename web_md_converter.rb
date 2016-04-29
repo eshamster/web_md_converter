@@ -15,7 +15,7 @@ helpers do
       return true
     else
       status 400
-      body "Some required parameters are lack: #{required}"
+      body "Some required parameters are lack: Required = #{required}"
       return nil
     end
   end
@@ -72,7 +72,22 @@ get '/templates/lists' do
 end
 
 post '/templates' do
-  "not implemnted"
+  return unless check_required_params(params, :file, :type, :name)
+
+  f = params[:file][:tempfile]
+  type_manager = create_type_manager(params[:type]) || return
+
+  begin
+    type = params[:type]
+    name = params[:name]
+    TemplateManager::add(src_path: f.path, type: type, dst_name: name)
+    status 200
+    { "type" => type, "name" => name }.to_json
+  rescue => e # TODO: classify errors
+    status 500
+    puts e.message
+    "Something wrong"
+  end
 end
 
 put '/templates' do
