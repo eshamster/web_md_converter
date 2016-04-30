@@ -1,3 +1,5 @@
+var request = window.superagent;
+
 function foreach_selector(selector, func) {
     var elems = document.querySelectorAll(selector);
     Array.prototype.forEach.call(elems, function(elem) {
@@ -50,10 +52,14 @@ function update_template_selector(target) {
         update_template_selector_impl(target);
     }
     else {
-        ajax.send('GET', '/templates/lists', function (res) {
-            templates_list = JSON.parse(res.responseText);
-            update_template_selector_impl(target);
-        });
+        request
+            .get('/templates/lists')
+            .end(function (err, res) {
+                if (err === null) {
+                    templates_list = JSON.parse(res.text);
+                    update_template_selector_impl(target);
+                }
+            });
     }
 }
 

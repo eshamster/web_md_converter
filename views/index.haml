@@ -1,6 +1,8 @@
 %html
   %head
     %link{:rel => 'stylesheet', :href => './index.css'}
+    %script{:type => 'text/javascript', :src => 'https://cdnjs.cloudflare.com/ajax/libs/superagent/1.2.0/superagent.min.js'}
+    %script{:type => 'text/javascript', :src => './tools.js'}
     %script{:type => 'text/javascript', :src => './index.js'}
   %body
     %form{:name => 'main_form', :action => '/convert', :method => 'POST', :enctype => 'multipart/form-data'}
