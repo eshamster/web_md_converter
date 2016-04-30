@@ -50,15 +50,10 @@ function update_template_selector(target) {
         update_template_selector_impl(target);
     }
     else {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/templates/lists', true);
-        xhr.send();
-        xhr.onreadystatechange = function(e) { 
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                templates_list = JSON.parse(xhr.responseText); 
-            }
+        ajax.send('GET', '/templates/lists', function (res) {
+            templates_list = JSON.parse(res.responseText);
             update_template_selector_impl(target);
-        }
+        });
     }
 }
 
