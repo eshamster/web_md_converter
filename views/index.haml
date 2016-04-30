@@ -21,7 +21,7 @@
           %td template_name
           %td
             %select#template_selector{:name => 'template'}
-            %button{:onClick => 'return get_template(this.form.output_type.value, this.form.template.value);'} Download
+            %button{:onClick => 'return template.get(this.form.output_type.value, this.form.template.value);'} Download
         %tr
           %td
           %td
@@ -34,9 +34,7 @@
     %form{:name => 'template_post_form', :action => '/templates', :method => 'POST', :enctype => 'multipart/form-data'}
       %div{} Upload a new template file
       %input{:name => 'file', :type => 'file'}
-      %input{:type => 'hidden', :name => 'type'}
-      %input{:type => 'hidden', :name => 'name'}
-      %input{:type => 'submit', :value => 'Upload', :onClick => 'post_template()'}
+      %input{:type => 'button', :value => 'Upload', :onClick => 'template.get()'}
     %div.html_conf configuration of html
     %div.docx_conf{:style => 'display:none'} configuration of docx
-    %script{:type => 'text/javascript'} update_template_selector('html');
+    %script{:type => 'text/javascript'} template.update_template_selector('html');
