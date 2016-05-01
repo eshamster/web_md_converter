@@ -1,9 +1,11 @@
 %html
   %head
     %link{:rel => 'stylesheet', :href => './index.css'}
+    %script{:type => 'text/javascript', :src => 'https://cdnjs.cloudflare.com/ajax/libs/superagent/1.2.0/superagent.min.js'}
+    %script{:type => 'text/javascript', :src => './tools.js'}
     %script{:type => 'text/javascript', :src => './index.js'}
   %body
-    %form{:action => '/convert', :method => 'POST', :enctype => 'multipart/form-data'}
+    %form{:name => 'main_form', :action => '/convert', :method => 'POST', :enctype => 'multipart/form-data'}
       %table#main_table
         %tr
           %td markdown file
@@ -19,11 +21,21 @@
           %td template_name
           %td
             %select#template_selector{:name => 'template'}
+            %button{:onClick => 'return template_manager.get(this.form.output_type.value, this.form.template.value);'} Download
+            %button{:id => 'template_delete_button', :onClick => 'return template_manager.delete();'} Delete
         %tr
           %td
           %td
             %input{:type => 'submit', :value => 'convert'}
       %input{:type => 'hidden', :name => '_method', :value => 'post'}
+    %form{:name => 'template_get_form', :action => '/templates', :method => 'GET'}
+      %input{:type => 'hidden', :name => 'type'}
+      %input{:type => 'hidden', :name => 'name'}
+      %input{:type => 'hidden', :name => '_method', :value => 'get'}
+    %form{:name => 'template_post_form', :onSubmit => 'return false'}
+      %div{} Upload a new template file
+      %input{:name => 'file', :type => 'file'}
+      %input{:type => 'button', :value => 'Upload', :onClick => 'template_manager.post()'}
     %div.html_conf configuration of html
-    %div.docx_conf{:style => 'display:none'} configuration of docx
-    %script{:type => 'text/javascript'} update_template_selector('html');
+    %div.word_conf{:style => 'display:none'} configuration of word
+    %script{:type => 'text/javascript'} template_list.update_template_selector('html');
