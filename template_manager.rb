@@ -57,7 +57,7 @@ class TemplateManager
       end
       path = create_path(base_dir, type, name)
       unless FileUtils.rm(path)
-        raise StandardError, "Deletng #{path} is failed"
+        raise StandardError, "Deleting #{path} is failed"
       end
       return true
     end
