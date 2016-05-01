@@ -107,6 +107,9 @@ var template_manager =
             delete: function() {
                 // TODO: Display yes-no dialog before execution
                 try {
+                    if (!window.confirm("Are you sure want to delete the template?")) {
+                        return;
+                    }
                     var main_form = document.main_form;
                     var type = main_form.output_type.value;
                     var name = main_form.template.value;
