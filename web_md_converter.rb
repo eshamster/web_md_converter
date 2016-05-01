@@ -94,7 +94,17 @@ put '/templates' do
 end
 
 delete '/templates' do
-  "not implemnted"
+  return unless check_required_params(params, :type, :name)
+  begin
+    type = params[:type]
+    name = params[:name]
+    TemplateManager::delete(type: type, name: name);
+    status 200
+    { "type" => type, "name" => name }.to_json
+  rescue => e # TODO: classify errors
+    status 500
+    body "Internal error"
+  end
 end
 
 

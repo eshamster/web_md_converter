@@ -25,7 +25,7 @@ function do_after_switch_type (after_type) {
     template.update_template_selector(after_type);
 }
 
-var template =
+var template_manager =
     (function() {
         var templates_list = null; // as json
 
@@ -81,7 +81,7 @@ var template =
             },
             post: function() {
                 try {
-                    var form = document.template_post_form;
+                    var form = document.template_post_form; 
                     var main_form = document.main_form;
                     request
                         .post('/templates')
@@ -94,6 +94,31 @@ var template =
                                 alert("Uploaded successfully!!\n" +
                                      "type: " + res_json.type + "\n" +
                                      "name: " + res_json.name);
+                            }
+                            else {
+                                alert(err.response.text);
+                            }
+                        });
+                }
+                finally {
+                    return false;
+                }
+            },
+            delete: function() {
+                // TODO: Display yes-no dialog before execution
+                try {
+                    var main_form = document.main_form;
+                    var type = main_form.output_type.value;
+                    var name = main_form.template.value;
+                    request.del('/templates')
+                        .field('name', name)
+                        .field('type', type)
+                        .end(function (err, res) {
+                            if (err === null) {
+                                var res_json = JSON.parse(res.text);
+                                alert("Deleted successfully!!\n" +
+                                      "type: " + res_json['type'] + "\n" +
+                                      "name: " + res_json.name);
                             }
                             else {
                                 alert(err.response.text);

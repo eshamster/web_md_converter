@@ -21,7 +21,8 @@
           %td template_name
           %td
             %select#template_selector{:name => 'template'}
-            %button{:onClick => 'return template.get(this.form.output_type.value, this.form.template.value);'} Download
+            %button{:onClick => 'return template_manager.get(this.form.output_type.value, this.form.template.value);'} Download
+            %button{:id => 'template_delete_button', :onClick => 'return template_manager.delete();'} Delete
         %tr
           %td
           %td
@@ -34,7 +35,7 @@
     %form{:name => 'template_post_form', :onSubmit => 'return false'}
       %div{} Upload a new template file
       %input{:name => 'file', :type => 'file'}
-      %input{:type => 'button', :value => 'Upload', :onClick => 'template.post()'}
+      %input{:type => 'button', :value => 'Upload', :onClick => 'template_manager.post()'}
     %div.html_conf configuration of html
     %div.docx_conf{:style => 'display:none'} configuration of docx
-    %script{:type => 'text/javascript'} template.update_template_selector('html');
+    %script{:type => 'text/javascript'} template_manager.update_template_selector('html');

@@ -8,3 +8,8 @@
 #main_table td:nth-of-type(2) {
     text-align: left;
 }
+
+#template_delete_button {
+    background-color: red;
+    color: white;
+}
