@@ -83,8 +83,22 @@ var template =
                 try {
                     var form = document.template_post_form;
                     var main_form = document.main_form;
-                    form.type.value = main_form.output_type.value;
-                    form.name.value = form.file.value.split(/[\/\\]/).pop();
+                    request
+                        .post('/templates')
+                        .attach('file', form.file.files[0])
+                        .field('type', main_form.output_type.value)
+                        .field('name', form.file.value.split(/[\/\\]/).pop())
+                        .end(function (err, res) {
+                            if (err === null) {
+                                var res_json = JSON.parse(res.text);
+                                alert("Uploaded successfully!!\n" +
+                                     "type: " + res_json.type + "\n" +
+                                     "name: " + res_json.name);
+                            }
+                            else {
+                                alert(err.response.text);
+                            }
+                        });
                 }
                 finally {
                     return false;

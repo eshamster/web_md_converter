@@ -85,8 +85,7 @@ post '/templates' do
     { "type" => type, "name" => name }.to_json
   rescue => e # TODO: classify errors
     status 500
-    puts e.message
-    "Something wrong"
+    body "Internal error"
   end
 end
 
