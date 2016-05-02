@@ -119,7 +119,7 @@ template_list.add_updating_hook(function () {
     template_selector.update(get_current_type());
 });
 
-var template_manager =
+var template_ajax =
     (function() {
         return {
             get: function(type, name) {
