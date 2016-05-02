@@ -22,37 +22,57 @@ function show_one_conf_only (target_type) {
 
 function do_after_switch_type (after_type) {
     show_one_conf_only(after_type);
-    template_list.update_template_selector(after_type);
+    template_selector.update(after_type);
 }
 
 function get_current_type() {
     return document.main_form.output_type.value;
 }
 
-var template_list =
+var template_selector =
     (function() {
-        // TODO: Exclusive updating for this list
-        var list = null; // as JSON
-        var updating_hooks = [];
-
-        function append_template_option(selector, name) {
+        function append_option_to_selector(selector, name) {
             var option = document.createElement('option');
             option.value = name;
             option.textContent = name;
             selector.appendChild(option);
         };
 
-        function update_template_selector_impl(target) {
+        function update_impl(target) {
             if (list === null) {
                 return;
             }
             var selector = document.querySelector('#template_selector');
             selector.textContent = null;
-            append_template_option(selector, '');
+            append_option_to_selector(selector, '');
             Array.prototype.forEach.call(list[target], function(name) {
-                append_template_option(selector, name);
+                append_option_to_selector(selector, name);
             });
         };
+        return {
+            update: function(target) {
+                if (list != null) {
+                    update_impl(target);
+                }
+                else {
+                    request
+                        .get('/templates/lists')
+                        .end(function (err, res) {
+                            if (err === null) {
+                                list = JSON.parse(res.text);
+                                update_impl(target);
+                            }
+                        });
+                }
+            }
+        };
+    }());
+
+var template_list =
+    (function() {
+        // TODO: Exclusive updating for this list
+        var list = null; // as JSON
+        var updating_hooks = [];
 
         function execute_updating_hooks() {
             for(var key in updating_hooks) {
@@ -92,26 +112,11 @@ var template_list =
             add_updating_hook: function(hook) {
                 updating_hooks.push(hook);
             },
-            update_template_selector: function(target) {
-                if (list != null) {
-                    update_template_selector_impl(target);
-                }
-                else {
-                    request
-                        .get('/templates/lists')
-                        .end(function (err, res) {
-                            if (err === null) {
-                                list = JSON.parse(res.text);
-                                update_template_selector_impl(target);
-                            }
-                        });
-                }
-            },
         }
     }());
 
 template_list.add_updating_hook(function () {
-    template_list.update_template_selector(get_current_type());
+    template_selector.update(get_current_type());
 });
 
 var template_manager =
