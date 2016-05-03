@@ -68,7 +68,12 @@ get '/templates' do
 end
 
 get '/templates/lists' do
-  return TemplateManager::get_templates_list.to_json
+  result_table = {};
+  all_list = TemplateManager::get_templates_list;
+  all_list.each { |type, list|
+    result_table[type] = { "list" => list }
+  }
+  return result_table.to_json
 end
 
 post '/templates' do

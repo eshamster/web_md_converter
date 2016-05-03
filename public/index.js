@@ -66,34 +66,38 @@ var template_list =
         }
       };
 
+      function get_type_array(type) {
+        if (!list[type]) {
+          throw new Error("The type is not exist: " + type);
+        }
+        return list[type].list
+      };
+
       return {
         add: function(type, name) {
-          if (list[type]) {
-            if (list[type].indexOf(name) >= 0) {
-              throw new Error("The name in the type is already registered: type, name = " +
-                              type + ", " + name);
-            }
-            list[type].push(name);
+          var array = get_type_array(type);
+          if (array.indexOf(name) >= 0) {
+            throw new Error("The name in the type is already registered: type, name = " +
+                            type + ", " + name);
           }
-          else {
-            list[type] = [name];
-          }
+          array.push(name);
           execute_updating_hooks();
         },
         delete: function(type, name) {
           if (!list[type]) {
             throw new Error("The type is not exist: " + type);
           }
-          var index = list[type].indexOf(name);
+          var array = get_type_array(type)
+          var index = array.indexOf(name);
           if (index < 0) {
             throw new Error("The name in the type has not been registered: type, name = " +
                             type + ", " + name);
           }
-          delete list[type][index];
+          delete array[index];
           execute_updating_hooks();
         },
         get: function(type) {
-          return list[type];
+          return get_type_array(type);
         },
         add_updating_hook: function(hook) {
           updating_hooks.push(hook);
@@ -107,7 +111,7 @@ var template_list =
                 execute_updating_hooks();
               }
               else {
-                alert("Error: " + err.message)
+                alert("Error in initializing template_list: " + err.message)
               }
             });
         }
