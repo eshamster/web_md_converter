@@ -2,7 +2,6 @@ require 'fileutils'
 
 class TemplateManager
   private_class_method :new
-  @@base_dir = File.dirname(__FILE__) + '/templates'
   
   class << self
     def search_file_path(type:, name:, base_dir: @@base_dir)
@@ -62,7 +61,18 @@ class TemplateManager
       return true
     end
 
+    def set_base_dir!(dir_path)
+      @@base_dir = dir_path
+    end
+
+    def reset_base_dir!
+      @@base_dir = @@default_base_dir
+    end
+
     private
+
+    @@default_base_dir = File.dirname(__FILE__) + '/templates'
+    @@base_dir = @@default_base_dir
 
     def create_path(base_dir, type, name)
       return "#{base_dir}/#{type}/#{name}"
