@@ -36,7 +36,7 @@ class TemplateManager
     end
 
     def get(type:, name:, base_dir: @@base_dir)
-      unless TypeManager::is_valid?(type)
+      unless TypeManager::valid?(type)
         raise StandardError, "The type '#{type}' is not supported"
       end
       path = create_path(base_dir, type, name)
@@ -69,7 +69,7 @@ class TemplateManager
     end
 
     def get_templates_of_type(base_dir, type)
-      unless TypeManager::is_valid?(type)
+      unless TypeManager::valid?(type)
         raise StandardError, "The type '#{type}' is invalid"
       end
       return get_real_entries("#{base_dir}/#{type}")
