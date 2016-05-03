@@ -7,7 +7,7 @@ module TypeManager
       return ['html', 'word']
     end
 
-    def is_valid?(type)
+    def valid?(type)
       return all_supported_types.include?(type)
     end
     
@@ -18,7 +18,7 @@ module TypeManager
       when 'word' then
         return Word.new()
       else
-        unless is_valid?(type)
+        unless valid?(type)
           raise ArgumentError, "The type '#{type}' is not supported"
         else
           raise StandardError, "The type '#{type}' is not implemented"

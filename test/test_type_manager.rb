@@ -19,7 +19,7 @@ class TestTypeManager < Test::Unit::TestCase
 
   test 'Test validation' do
     existing_type = TypeManager::all_supported_types[0]
-    assert TypeManager::is_valid?(existing_type)
-    assert ! TypeManager::is_valid?('not_exist')
+    assert TypeManager::valid?(existing_type)
+    assert ! TypeManager::valid?('not_exist')
   end
 end

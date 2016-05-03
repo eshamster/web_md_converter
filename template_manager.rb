@@ -2,7 +2,6 @@ require 'fileutils'
 
 class TemplateManager
   private_class_method :new
-  @@base_dir = File.dirname(__FILE__) + '/templates'
   
   class << self
     def search_file_path(type:, name:, base_dir: @@base_dir)
@@ -36,7 +35,7 @@ class TemplateManager
     end
 
     def get(type:, name:, base_dir: @@base_dir)
-      unless TypeManager::is_valid?(type)
+      unless TypeManager::valid?(type)
         raise StandardError, "The type '#{type}' is not supported"
       end
       path = create_path(base_dir, type, name)
@@ -62,14 +61,25 @@ class TemplateManager
       return true
     end
 
+    def set_base_dir!(dir_path)
+      @@base_dir = dir_path
+    end
+
+    def reset_base_dir!
+      @@base_dir = @@default_base_dir
+    end
+
     private
+
+    @@default_base_dir = File.dirname(__FILE__) + '/templates'
+    @@base_dir = @@default_base_dir
 
     def create_path(base_dir, type, name)
       return "#{base_dir}/#{type}/#{name}"
     end
 
     def get_templates_of_type(base_dir, type)
-      unless TypeManager::is_valid?(type)
+      unless TypeManager::valid?(type)
         raise StandardError, "The type '#{type}' is invalid"
       end
       return get_real_entries("#{base_dir}/#{type}")
