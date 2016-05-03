@@ -38,32 +38,18 @@ var template_selector =
         selector.appendChild(option);
       };
 
-      function update_impl(target) {
-        if (list === null) {
-          return;
-        }
-        var selector = document.querySelector('#template_selector');
-        selector.textContent = null;
-        append_option_to_selector(selector, '');
-        Array.prototype.forEach.call(list[target], function(name) {
-          append_option_to_selector(selector, name);
-        });
-      };
       return {
         update: function(target) {
-          if (list != null) {
-            update_impl(target);
+          var list = template_list.get(target);
+          if (list === null) {
+            return;
           }
-          else {
-            request
-              .get('/templates/lists')
-              .end(function (err, res) {
-                if (err === null) {
-                  list = JSON.parse(res.text);
-                  update_impl(target);
-                }
-              });
-          }
+          var selector = document.querySelector('#template_selector');
+          selector.textContent = null;
+          append_option_to_selector(selector, '');
+          Array.prototype.forEach.call(list, function(name) {
+            append_option_to_selector(selector, name);
+          });
         }
       };
     }());
@@ -106,12 +92,25 @@ var template_list =
           delete list[type][index];
           execute_updating_hooks();
         },
-        get: function() {
-          return list;
+        get: function(type) {
+          return list[type];
         },
         add_updating_hook: function(hook) {
           updating_hooks.push(hook);
         },
+        init: function() {
+          request
+            .get('/templates/lists')
+            .end(function (err, res) {
+              if (err === null) {
+                list = JSON.parse(res.text);
+                execute_updating_hooks();
+              }
+              else {
+                alert("Error: " + err.message)
+              }
+            });
+        }
       }
     }());
 
