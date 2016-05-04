@@ -82,10 +82,15 @@ class WebMdConverter_Templates < Test::Unit::TestCase
     file = unregistered_template_file
 
     # register using already registred name
-    # TODO: 
+    registered_name = 'test1.css'
+    assert TemplateManager::exist?(type: type, name: registered_name)
+    post "templates", :file => file, :type => type, :name => registered_name
+    assert_equal 400, last_response.status
 
     # not supported type
-    # TODO: 
+    name = 'new.css'
+    post "templates", :file => file, :type => 'not_exist', :name => name
+    assert_equal 400, last_response.status
     
     # lack of required param
     post "templates", :file => file, :type => type

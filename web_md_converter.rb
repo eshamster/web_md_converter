@@ -94,8 +94,12 @@ post '/templates' do
     TemplateManager::add(src_path: f.path, type: type, dst_name: name)
     status 200
     { "type" => type, "name" => name }.to_json
-  rescue => e # TODO: classify errors
+  rescue StandardError => e
+    status 400
+    body e.message
+  rescue Exception => e
     status 500
+    puts e.message
     body "Internal error"
   end
 end
