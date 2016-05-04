@@ -43,7 +43,6 @@ class WebMdConverter < Test::Unit::TestCase
   private
   
   def sample_md
-    file_name = @@base_dir + '/sample.md'
-    return Rack::Test::UploadedFile.new(file_name)
+    unregistered_template_file
   end 
 end

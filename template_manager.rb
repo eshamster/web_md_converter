@@ -45,6 +45,10 @@ class TemplateManager
       return path
     end
 
+    def exist?(type:, name:, base_dir: @@base_dir) 
+      File.exist? create_path(base_dir, type, name)
+    end
+
     def update(src_path:, type:, dst_name:, base_dir: @@base_dir)
       add(src_path: src_path, type: type, dst_name: dst_name, base_dir: base_dir, overwrite: true)
     end

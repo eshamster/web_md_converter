@@ -27,9 +27,10 @@ helpers do
       status 400
       body e.message
       return nil
-    rescue StandardError => e
+    rescue Exception => e
       status 500
-      body e.message
+      puts e.message
+      body "Internal error: please see the server log"
       return nil
     end
   end
@@ -57,10 +58,15 @@ end
 
 get '/templates' do
   return unless check_required_params(params, :type, :name)
-
-  path = TemplateManager::get(type: params[:type], name: params[:name])
-
   type_manager = create_type_manager(params[:type]) || return
+
+  begin
+    path = TemplateManager::get(type: params[:type], name: params[:name])
+  rescue StandardError => e
+    status 400
+    body e.message
+    return
+  end
   File.open(path) { |file|
     content_type type_manager.template_content_type
     file.read file.size
@@ -68,7 +74,12 @@ get '/templates' do
 end
 
 get '/templates/lists' do
-  return TemplateManager::get_templates_list.to_json
+  result_table = {};
+  all_list = TemplateManager::get_templates_list;
+  all_list.each { |type, list|
+    result_table[type] = { "list" => list }
+  }
+  return result_table.to_json
 end
 
 post '/templates' do
@@ -83,8 +94,12 @@ post '/templates' do
     TemplateManager::add(src_path: f.path, type: type, dst_name: name)
     status 200
     { "type" => type, "name" => name }.to_json
-  rescue => e # TODO: classify errors
+  rescue StandardError => e
+    status 400
+    body e.message
+  rescue Exception => e
     status 500
+    puts e.message
     body "Internal error"
   end
 end
@@ -101,8 +116,12 @@ delete '/templates' do
     TemplateManager::delete(type: type, name: name);
     status 200
     { "type" => type, "name" => name }.to_json
-  rescue => e # TODO: classify errors
+  rescue StandardError => e
+    status 400
+    body e.message
+  rescue Exception => e
     status 500
+    puts e.message
     body "Internal error"
   end
 end
