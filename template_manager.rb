@@ -1,8 +1,6 @@
 require 'fileutils'
 
-class TemplateManager
-  private_class_method :new
-  
+module TemplateManager
   class << self
     def search_file_path(type:, name:, base_dir: @@base_dir)
       path_name = create_path(base_dir, type, name)
