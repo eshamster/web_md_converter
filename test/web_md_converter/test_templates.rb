@@ -80,6 +80,12 @@ class WebMdConverter_Templates < Test::Unit::TestCase
   
   test "Errors of Post templates" do
     file = unregistered_template_file
+
+    # register using already registred name
+    # TODO: 
+
+    # not supported type
+    # TODO: 
     
     # lack of required param
     post "templates", :file => file, :type => type
@@ -88,5 +94,34 @@ class WebMdConverter_Templates < Test::Unit::TestCase
     assert_equal 400, last_response.status
     post "templates", :type => type, :name => 'new.css'
     assert_equal 400, last_response.status
+  end
+  
+  # ---------- #
+  test "Delete templates" do
+    name = 'test1.css'
+    assert TemplateManager::exist?(type: type, name: name)
+    
+    delete "templates", :type => type, :name => name
+    
+    assert last_response.ok?
+    assert !TemplateManager::exist?(type: type, name: name)
+  end
+
+  test "Errors of Delete templates" do
+    name = 'test1.css'
+    
+    # delete a not registered template
+    delete "templates", :type => type, :name => 'not_exist'
+    assert_equal 400, last_response.status
+
+    # not supported type
+    delete "templates", :type => 'not_exist', :name => name
+    assert_equal 400, last_response.status
+
+    # lack of required param
+    delete "templates", :name => name
+    assert_equal 400, last_response.status
+    delete "templates", :type => type
+    assert_equal 400, last_response.status    
   end
 end
