@@ -17,7 +17,8 @@ class WebMdConverter_Templates < Test::Unit::TestCase
   teardown :delete_base_dir
 
   type = 'html'
-  template_name = 'test1.css'
+  EXIST_NAME = 'test1.css'
+  NOT_EXSIST_NAME = 'not_exist.css'
 
   def app
     Sinatra::Application
@@ -25,12 +26,13 @@ class WebMdConverter_Templates < Test::Unit::TestCase
 
   test "Validate parameters used in this test sets" do
     assert TypeManager::valid? type
-    assert TemplateManager::exist?(type: type, name: template_name)
+    assert TemplateManager::exist?(type: type, name: EXIST_NAME)
+    assert !TemplateManager::exist?(type: type, name: NOT_EXSIST_NAME)
   end
 
   # ---------- #
   test "Get templates" do
-    get "templates", :type => type, :name => template_name
+    get "templates", :type => type, :name => EXIST_NAME
     assert last_response.ok?
 
     assert_equal TypeManager::create(type).template_content_type,
@@ -39,18 +41,18 @@ class WebMdConverter_Templates < Test::Unit::TestCase
 
   test "Errors of Get templates" do
     # not supported type
-    get "templates", :type => 'not_exist', :name => template_name
+    get "templates", :type => 'not_exist', :name => EXIST_NAME
     assert_equal 400, last_response.status
 
     # not exist file 
-    get "templates", :type => type, :name => 'not_exist' 
+    get "templates", :type => type, :name => NOT_EXSIST_NAME
     assert_equal 400, last_response.status
     
     # lack of required param
     get "templates", :type => type
     assert_equal 400, last_response.status
 
-    get "templates", :name => template_name
+    get "templates", :name => EXIST_NAME
     assert_equal 400, last_response.status
   end
 
@@ -69,62 +71,51 @@ class WebMdConverter_Templates < Test::Unit::TestCase
   
   # ---------- #
   test "Post templates" do
-    name = 'new.css'
-    assert !TemplateManager::exist?(type: type, name: name)
-    
-    post "templates", :file => unregistered_template_file, :type => type, :name => name 
+    post "templates", :file => unregistered_template_file, :type => type, :name => NOT_EXSIST_NAME
     
     assert last_response.ok?
-    assert TemplateManager::exist?(type: type, name: name)
+    assert TemplateManager::exist?(type: type, name: NOT_EXSIST_NAME)
   end
   
   test "Errors of Post templates" do
     file = unregistered_template_file
 
     # register using already registred name
-    registered_name = 'test1.css'
-    assert TemplateManager::exist?(type: type, name: registered_name)
-    post "templates", :file => file, :type => type, :name => registered_name
+    post "templates", :file => file, :type => type, :name => EXIST_NAME
     assert_equal 400, last_response.status
 
     # not supported type
-    name = 'new.css'
-    post "templates", :file => file, :type => 'not_exist', :name => name
+     post "templates", :file => file, :type => 'not_exist', :name => NOT_EXSIST_NAME
     assert_equal 400, last_response.status
     
     # lack of required param
     post "templates", :file => file, :type => type
     assert_equal 400, last_response.status
-    post "templates", :file => file, :name => 'new.css'
+    post "templates", :file => file, :name => NOT_EXSIST_NAME
     assert_equal 400, last_response.status
-    post "templates", :type => type, :name => 'new.css'
+    post "templates", :type => type, :name => NOT_EXSIST_NAME
     assert_equal 400, last_response.status
   end
   
   # ---------- #
   test "Delete templates" do
-    name = 'test1.css'
-    assert TemplateManager::exist?(type: type, name: name)
-    
-    delete "templates", :type => type, :name => name
+    delete "templates", :type => type, :name => EXIST_NAME
     
     assert last_response.ok?
-    assert !TemplateManager::exist?(type: type, name: name)
+    assert !TemplateManager::exist?(type: type, name: EXIST_NAME)
   end
 
   test "Errors of Delete templates" do
-    name = 'test1.css'
-    
     # delete a not registered template
-    delete "templates", :type => type, :name => 'not_exist'
+    delete "templates", :type => type, :name => NOT_EXSIST_NAME
     assert_equal 400, last_response.status
 
     # not supported type
-    delete "templates", :type => 'not_exist', :name => name
+    delete "templates", :type => 'not_exist', :name => EXIST_NAME
     assert_equal 400, last_response.status
 
     # lack of required param
-    delete "templates", :name => name
+    delete "templates", :name => EXIST_NAME
     assert_equal 400, last_response.status
     delete "templates", :type => type
     assert_equal 400, last_response.status    
