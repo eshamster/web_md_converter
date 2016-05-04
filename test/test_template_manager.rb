@@ -79,6 +79,13 @@ class TestTemplateManager < Test::Unit::TestCase
   end
 
   # ---------- #
+  test 'Test exist?'do
+    assert TemplateManager::exist?(type: 'html', name: 'test1.css')
+    assert !TemplateManager::exist?(type: 'word', name: 'test1.css')
+    assert !TemplateManager::exist?(type: 'not_exist', name: 'test1.css')
+  end
+
+  # ---------- #
   test 'Test update' do
     # TODO: compare the content of the file between before and after
     type = 'html'
