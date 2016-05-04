@@ -23,11 +23,12 @@ class WebMdConverter_Templates < Test::Unit::TestCase
     Sinatra::Application
   end
 
-  test "Validate parameters used in test sets" do
+  test "Validate parameters used in this test sets" do
     assert TypeManager::valid? type
     assert TemplateManager::exist?(type: type, name: template_name)
   end
 
+  # ---------- #
   test "Get templates" do
     get "templates", :type => type, :name => template_name
     assert last_response.ok?
@@ -53,6 +54,7 @@ class WebMdConverter_Templates < Test::Unit::TestCase
     assert_equal 400, last_response.status
   end
 
+  # ---------- #
   test "Get templates/lists" do
     get "templates/lists"
 
@@ -63,5 +65,28 @@ class WebMdConverter_Templates < Test::Unit::TestCase
       assert TypeManager::valid?(key)
       assert ["list"].sort == data.keys.sort
     }
+  end
+  
+  # ---------- #
+  test "Post templates" do
+    name = 'new.css'
+    assert !TemplateManager::exist?(type: type, name: name)
+    
+    post "templates", :file => unregistered_template_file, :type => type, :name => name 
+    
+    assert last_response.ok?
+    assert TemplateManager::exist?(type: type, name: name)
+  end
+  
+  test "Errors of Post templates" do
+    file = unregistered_template_file
+    
+    # lack of required param
+    post "templates", :file => file, :type => type
+    assert_equal 400, last_response.status
+    post "templates", :file => file, :name => 'new.css'
+    assert_equal 400, last_response.status
+    post "templates", :type => type, :name => 'new.css'
+    assert_equal 400, last_response.status
   end
 end

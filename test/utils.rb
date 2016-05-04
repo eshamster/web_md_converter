@@ -20,6 +20,14 @@ module PrepareResourceMethods
     TemplateManager::reset_base_dir!
   end
 
+  def unregistered_template_path
+    @@base_dir + '/sample.md'
+  end
+  
+  def unregistered_template_file
+    Rack::Test::UploadedFile.new(unregistered_template_path)
+  end
+
   private
 
   @@src_dir = File.dirname(__FILE__) + '/_resource'
