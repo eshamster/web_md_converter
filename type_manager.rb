@@ -21,7 +21,7 @@ module TypeManager
         unless valid?(type)
           raise ArgumentError, "The type '#{type}' is not supported"
         else
-          raise StandardError, "The type '#{type}' is not implemented"
+          raise NotImplementedError, "The type '#{type}' is not implemented"
         end
       end
     end

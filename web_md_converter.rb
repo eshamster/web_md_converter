@@ -27,9 +27,10 @@ helpers do
       status 400
       body e.message
       return nil
-    rescue StandardError => e
+    rescue Exception => e
       status 500
-      body e.message
+      puts e.message
+      body "Internal error: please see the server log"
       return nil
     end
   end
@@ -57,10 +58,15 @@ end
 
 get '/templates' do
   return unless check_required_params(params, :type, :name)
-
-  path = TemplateManager::get(type: params[:type], name: params[:name])
-
   type_manager = create_type_manager(params[:type]) || return
+
+  begin
+    path = TemplateManager::get(type: params[:type], name: params[:name])
+  rescue StandardError => e
+    status 400
+    body e.message
+    return
+  end
   File.open(path) { |file|
     content_type type_manager.template_content_type
     file.read file.size
