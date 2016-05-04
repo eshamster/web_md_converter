@@ -5,7 +5,7 @@
     %script{:type => 'text/javascript', :src => './tools.js'}
     %script{:type => 'text/javascript', :src => './index.js'}
   %body
-    %form{:name => 'main_form', :action => '/convert', :method => 'POST', :enctype => 'multipart/form-data'}
+    %form{:name => 'main_form', :action => '/convert', :method => 'POST', :enctype => 'multipart/form-data', :target => '_blank'}
       %table#main_table
         %tr
           %td markdown file
