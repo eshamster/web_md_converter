@@ -37,7 +37,7 @@ module TemplateManager
         raise StandardError, "The type '#{type}' is not supported"
       end
       path = create_path(base_dir, type, name)
-      unless File.exist?(path)
+      unless File.file?(path)
         raise StandardError, "The template '#{name}' is not exist"
       end
       return path

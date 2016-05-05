@@ -76,6 +76,9 @@ class TestTemplateManager < Test::Unit::TestCase
     assert_raise(StandardError) do
       TemplateManager::get(type: 'html', name: 'not_exist')
     end
+    assert_raise(StandardError) do
+      TemplateManager::get(type: 'html', name: '')
+    end
   end
 
   # ---------- #
