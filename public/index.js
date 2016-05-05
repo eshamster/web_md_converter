@@ -175,12 +175,16 @@ var template_ajax =
         },
         delete: function() {
           try {
+            var main_form = document.main_form;
+            var name = main_form.template.value;
+            if (!name || name.length === 0) {
+              tools.report_error("Please select the name of template to delete");
+              return;
+            }
             if (!window.confirm("Are you sure want to delete the template?")) {
               return;
             }
-            var main_form = document.main_form;
             var type = main_form.output_type.value;
-            var name = main_form.template.value;
             request.del('/templates')
               .field('name', name)
               .field('type', type)
