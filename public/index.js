@@ -155,9 +155,14 @@ var template_ajax =
           try {
             var form = document.template_post_form; 
             var main_form = document.main_form;
+            var files = form.file.files;
+            if (!files || files.length === 0) {
+              tools.report_error("Please select a template file to upload");
+              return false;
+            }
             request
               .post('/templates')
-              .attach('file', form.file.files[0])
+              .attach('file', files[0])
               .field('type', main_form.output_type.value)
               .field('name', form.file.value.split(/[\/\\]/).pop())
               .end(function (err, res) {
