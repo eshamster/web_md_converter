@@ -5,12 +5,12 @@
     %script{:type => 'text/javascript', :src => './tools.js'}
     %script{:type => 'text/javascript', :src => './index.js'}
   %body
-    %form{:name => 'main_form', :action => '/convert', :method => 'POST', :enctype => 'multipart/form-data'}
+    %form{:name => 'main_form', :action => '/convert', :method => 'POST', :enctype => 'multipart/form-data', :target => '_blank'}
       %table#main_table
         %tr
           %td markdown file
           %td
-            %input{:type => 'file', :name => 'file'}
+            %input{:type => 'file', :name => 'file', :accept => '.md, .markdown'}
         %tr
           %td output type
           %td
@@ -26,9 +26,9 @@
         %tr
           %td
           %td
-            %input{:type => 'submit', :value => 'convert'}
+            %input#convert_button{:type => 'submit', :value => 'convert', :onClick => 'return check_convert_form(document.main_form);'}
       %input{:type => 'hidden', :name => '_method', :value => 'post'}
-    %form{:name => 'template_get_form', :action => '/templates', :method => 'GET'}
+    %form{:name => 'template_get_form', :target => '_blank', :action => '/templates', :method => 'GET'}
       %input{:type => 'hidden', :name => 'type'}
       %input{:type => 'hidden', :name => 'name'}
       %input{:type => 'hidden', :name => '_method', :value => 'get'}

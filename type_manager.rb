@@ -2,30 +2,30 @@ require_relative './template_manager'
 
 module TypeManager
   # ----- Module Methods ----- #
-  class << self
-    def all_supported_types()
-      return ['html', 'word']
-    end
+  def all_supported_types
+    ['html', 'word']
+  end
 
-    def valid?(type)
-      return all_supported_types.include?(type)
-    end
-    
-    def create(type)
-      case type
-      when 'html' then
-        return Html.new()
-      when 'word' then
-        return Word.new()
+  def valid?(type)
+    return all_supported_types.include?(type)
+  end
+  
+  def create(type)
+    case type
+    when 'html' then
+      return Html.new
+    when 'word' then
+      return Word.new
+    else
+      unless valid?(type)
+        raise ArgumentError, "The type '#{type}' is not supported"
       else
-        unless valid?(type)
-          raise ArgumentError, "The type '#{type}' is not supported"
-        else
-          raise NotImplementedError, "The type '#{type}' is not implemented"
-        end
+        raise NotImplementedError, "The type '#{type}' is not implemented"
       end
     end
   end
+
+  module_function :all_supported_types, :valid?, :create
 
   # ----- Classes ----- #
   class Base

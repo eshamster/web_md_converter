@@ -1,8 +1,6 @@
 require 'fileutils'
 
-class TemplateManager
-  private_class_method :new
-  
+module TemplateManager
   class << self
     def search_file_path(type:, name:, base_dir: @@base_dir)
       path_name = create_path(base_dir, type, name)
@@ -39,7 +37,7 @@ class TemplateManager
         raise StandardError, "The type '#{type}' is not supported"
       end
       path = create_path(base_dir, type, name)
-      unless File.exist?(path)
+      unless File.file?(path)
         raise StandardError, "The template '#{name}' is not exist"
       end
       return path

@@ -29,6 +29,14 @@ function get_current_type() {
   return document.main_form.output_type.value;
 }
 
+function check_convert_form(form) {
+  if (form.file.files.length == 0) {
+    tools.report_error("Please select a markdown file");
+    return false;
+  }
+  return true;
+}
+
 var template_selector =
     (function() {
       function append_option_to_selector(selector, name) {
@@ -127,6 +135,10 @@ var template_ajax =
       return {
         get: function(type, name) {
           try {
+            if (!name || name.length === 0) {
+              alert("Please select a template name to download");
+              return false;
+            }
             var form = document.template_get_form;
             form.type.value = type;
             form.name.value = name;
@@ -143,9 +155,14 @@ var template_ajax =
           try {
             var form = document.template_post_form; 
             var main_form = document.main_form;
+            var files = form.file.files;
+            if (!files || files.length === 0) {
+              tools.report_error("Please select a template file to upload");
+              return false;
+            }
             request
               .post('/templates')
-              .attach('file', form.file.files[0])
+              .attach('file', files[0])
               .field('type', main_form.output_type.value)
               .field('name', form.file.value.split(/[\/\\]/).pop())
               .end(function (err, res) {
@@ -166,14 +183,17 @@ var template_ajax =
           }
         },
         delete: function() {
-          // TODO: Display yes-no dialog before execution
           try {
+            var main_form = document.main_form;
+            var name = main_form.template.value;
+            if (!name || name.length === 0) {
+              tools.report_error("Please select the name of template to delete");
+              return;
+            }
             if (!window.confirm("Are you sure want to delete the template?")) {
               return;
             }
-            var main_form = document.main_form;
             var type = main_form.output_type.value;
-            var name = main_form.template.value;
             request.del('/templates')
               .field('name', name)
               .field('type', type)
