@@ -79,6 +79,7 @@ get '/templates/lists' do
   all_list.each { |type, list|
     result_table[type] = { "list" => list }
   }
+  content_type 'application/json'
   return result_table.to_json
 end
 
@@ -100,6 +101,7 @@ post '/templates' do
     name = params[:name]
     TemplateManager::add(src_path: f.path, type: type, dst_name: name)
     status 200
+    content_type 'application/json'
     { "type" => type, "name" => name }.to_json
   rescue StandardError => e
     status 400
@@ -122,6 +124,7 @@ delete '/templates' do
     name = params[:name]
     TemplateManager::delete(type: type, name: name);
     status 200
+    content_type 'application/json'
     { "type" => type, "name" => name }.to_json
   rescue StandardError => e
     status 400
