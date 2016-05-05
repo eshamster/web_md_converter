@@ -135,6 +135,10 @@ var template_ajax =
       return {
         get: function(type, name) {
           try {
+            if (!name || name.length === 0) {
+              alert("Please select a template name to download");
+              return false;
+            }
             var form = document.template_get_form;
             form.type.value = type;
             form.name.value = name;
