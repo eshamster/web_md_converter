@@ -26,7 +26,7 @@
         %tr
           %td
           %td
-            %input#convert_button{:type => 'submit', :value => 'convert'}
+            %input#convert_button{:type => 'submit', :value => 'convert', :onClick => 'return check_convert_form(document.main_form);'}
       %input{:type => 'hidden', :name => '_method', :value => 'post'}
     %form{:name => 'template_get_form', :target => '_blank', :action => '/templates', :method => 'GET'}
       %input{:type => 'hidden', :name => 'type'}

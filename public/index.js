@@ -29,6 +29,14 @@ function get_current_type() {
   return document.main_form.output_type.value;
 }
 
+function check_convert_form(form) {
+  if (form.file.files.length == 0) {
+    tools.report_error("Please select a markdown file");
+    return false;
+  }
+  return true;
+}
+
 var template_selector =
     (function() {
       function append_option_to_selector(selector, name) {
