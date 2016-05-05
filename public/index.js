@@ -31,7 +31,7 @@ function get_current_type() {
 
 function check_convert_form(form) {
   if (form.file.files.length == 0) {
-    tools.report_error("Please select a markdown file");
+    reporter.error("Please select a markdown file");
     return false;
   }
   return true;
@@ -119,7 +119,7 @@ var template_list =
                 execute_updating_hooks();
               }
               else {
-                alert("Error in initializing template_list: " + err.message)
+                reporter.fatal("Error in initializing template_list: " + err.message)
               }
             });
         }
@@ -136,7 +136,7 @@ var template_ajax =
         get: function(type, name) {
           try {
             if (!name || name.length === 0) {
-              alert("Please select a template name to download");
+              reporter.error("Please select a template name to download");
               return false;
             }
             var form = document.template_get_form;
@@ -157,7 +157,7 @@ var template_ajax =
             var main_form = document.main_form;
             var files = form.file.files;
             if (!files || files.length === 0) {
-              tools.report_error("Please select a template file to upload");
+              reporter.error("Please select a template file to upload");
               return false;
             }
             request
@@ -169,12 +169,12 @@ var template_ajax =
                 if (err === null) {
                   var res_json = JSON.parse(res.text);
                   template_list.add(res_json.type, res_json.name);
-                  alert("Uploaded successfully!!\n" +
-                        "type: " + res_json.type + "\n" +
-                        "name: " + res_json.name);
+                  reporter.notice("Uploaded successfully!!\n" +
+                                  "type: " + res_json.type + "\n" +
+                                  "name: " + res_json.name);
                 }
                 else {
-                  alert(err.response.text);
+                  reporter.fatal(err.response.text);
                 }
               });
           }
@@ -187,7 +187,7 @@ var template_ajax =
             var main_form = document.main_form;
             var name = main_form.template.value;
             if (!name || name.length === 0) {
-              tools.report_error("Please select the name of template to delete");
+              reporter.error("Please select the name of template to delete");
               return;
             }
             if (!window.confirm("Are you sure want to delete the template?")) {
@@ -201,12 +201,12 @@ var template_ajax =
                 if (err === null) {
                   var res_json = JSON.parse(res.text);
                   template_list.delete(res_json.type, res_json.name);
-                  alert("Deleted successfully!!\n" +
-                        "type: " + res_json.type + "\n" +
-                        "name: " + res_json.name);
+                  reporter.notice("Deleted successfully!!\n" +
+                                  "type: " + res_json.type + "\n" +
+                                  "name: " + res_json.name);
                 }
                 else {
-                  alert(err.response.text);
+                  reporter.fatal(err.response.text);
                 }
               });
           }
