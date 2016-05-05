@@ -34,3 +34,22 @@
 #convert_button:active {
     background-color: black;
 }
+
+#reporter {
+    border-radius: 3px;
+    margin: 5px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+#reporter.none {
+    display: none;
+}
+
+#reporter.error {
+    background-color: #fdd;
+}
+
+#reporter.notice {
+    background-color: #dfd;
+}

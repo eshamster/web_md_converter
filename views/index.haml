@@ -5,6 +5,7 @@
     %script{:type => 'text/javascript', :src => './tools.js'}
     %script{:type => 'text/javascript', :src => './index.js'}
   %body
+    %div#reporter.none
     %form{:name => 'main_form', :action => '/convert', :method => 'POST', :enctype => 'multipart/form-data', :target => '_blank'}
       %table#main_table
         %tr

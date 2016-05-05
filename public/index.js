@@ -169,9 +169,9 @@ var template_ajax =
                 if (err === null) {
                   var res_json = JSON.parse(res.text);
                   template_list.add(res_json.type, res_json.name);
-                  reporter.notice("Uploaded successfully!!\n" +
-                                  "type: " + res_json.type + "\n" +
-                                  "name: " + res_json.name);
+                  reporter.notice("Uploaded successfully (" +
+                                  "type: " + res_json.type + "," +
+                                  "name: " + res_json.name + ")");
                 }
                 else {
                   reporter.fatal(err.response.text);
@@ -201,9 +201,9 @@ var template_ajax =
                 if (err === null) {
                   var res_json = JSON.parse(res.text);
                   template_list.delete(res_json.type, res_json.name);
-                  reporter.notice("Deleted successfully!!\n" +
-                                  "type: " + res_json.type + "\n" +
-                                  "name: " + res_json.name);
+                  reporter.notice("Deleted successfully (" +
+                                  "type: " + res_json.type + ", " +
+                                  "name: " + res_json.name + ")");
                 }
                 else {
                   reporter.fatal(err.response.text);
