@@ -85,7 +85,14 @@ end
 post '/templates' do
   return unless check_required_params(params, :file, :type, :name)
 
-  f = params[:file][:tempfile]
+  file_obj = params[:file]
+  unless file_obj.is_a?(Hash) && file_obj[:tempfile]
+    status 400
+    body "The parameter 'file' should be a file object"
+    return
+  end
+  
+  f = file_obj[:tempfile]
   type_manager = create_type_manager(params[:type]) || return
 
   begin
