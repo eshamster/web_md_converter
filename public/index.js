@@ -174,7 +174,6 @@ var template_ajax =
           }
         },
         delete: function() {
-          // TODO: Display yes-no dialog before execution
           try {
             if (!window.confirm("Are you sure want to delete the template?")) {
               return;
