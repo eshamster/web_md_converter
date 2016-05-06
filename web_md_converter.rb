@@ -131,10 +131,24 @@ delete '/templates' do
   end
 end
 
-
 # --- template lists --- #
 
 get '/template_lists' do
   "not implemented"
 end
 
+# --- types --- #
+
+get '/types' do
+  result = {}
+  TypeManager::all_supported_types.each { |type|
+    manager = TypeManager::create(type)
+    result[type] = {
+      "content_type" => manager.content_type,
+      "specifier" => manager.specifier,
+      "template_content_type" => manager.template_content_type
+    }
+  }
+  content_type 'application/json'
+  return result.to_json;
+end
