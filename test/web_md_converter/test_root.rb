@@ -10,10 +10,6 @@ class WebMdConverter < Test::Unit::TestCase
   include Rack::Test::Methods
   include PrepareResourceMethods
 
-  def app
-    Sinatra::Application
-  end
-
   def test_root
     get '/'
     assert last_response.ok?

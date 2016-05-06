@@ -34,6 +34,10 @@ helpers do
       return nil
     end
   end
+  
+  def check_type_validation(type)
+    return create_type_manager(type)
+  end
 end
 
 post '/convert' do
@@ -80,6 +84,7 @@ end
 
 post '/templates' do
   return unless check_required_params(params, :file, :type, :name)
+  return unless check_type_validation(params[:type])
 
   file_obj = params[:file]
   unless file_obj.is_a?(Hash) && file_obj[:tempfile]
@@ -89,7 +94,6 @@ post '/templates' do
   end
   
   f = file_obj[:tempfile]
-  type_manager = create_type_manager(params[:type]) || return
 
   begin
     type = params[:type]
