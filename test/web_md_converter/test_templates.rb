@@ -66,7 +66,6 @@ class WebMdConverter_Templates < Test::Unit::TestCase
     res = JSON.parse(last_response.body) 
     res.each { |key, data|
       assert TypeManager::valid?(key)
-      assert ["list"].sort == data.keys.sort
     }
   end
   

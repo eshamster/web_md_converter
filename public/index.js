@@ -78,7 +78,7 @@ var template_list =
         if (!list[type]) {
           throw new Error("The type is not exist: " + type);
         }
-        return list[type].list
+        return list[type]
       };
 
       return {

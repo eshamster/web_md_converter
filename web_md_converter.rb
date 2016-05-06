@@ -74,13 +74,8 @@ get '/templates' do
 end
 
 get '/templates/lists' do
-  result_table = {};
-  all_list = TemplateManager::get_templates_list;
-  all_list.each { |type, list|
-    result_table[type] = { "list" => list }
-  }
   content_type 'application/json'
-  return result_table.to_json
+  return TemplateManager::get_templates_list.to_json
 end
 
 post '/templates' do
