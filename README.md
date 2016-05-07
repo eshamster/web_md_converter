@@ -87,8 +87,27 @@ Get a template file
 
 |Name|Required?|Type|Description|
 |:---|:---|:---|:---|
-|type|true|string||
-|name|true|string||
+|type|true|string|The format name. (Ex. html, word)|
+|name|true|string|The name of a registered template file.|
+
+Example:
+
+```text
+$ curl -i "http://$address/templates?type=html&name=sample.css"
+HTTP/1.1 200 OK
+Content-Type: text/css;charset=utf-8
+
+h1 {
+    text-decoration: underline;
+}
+
+table {
+    border: 2px double black;
+    border-collapse: collapse;
+}
+...
+...
+```
 
 #### POST
 
