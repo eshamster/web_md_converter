@@ -37,12 +37,29 @@ Convert a markdown file to another file by specfied format
 
 #### GET
 
+Get lists of templates. Keys and values of the return value by this API are used in other APIs.
+
+- A key: 'output_type' or 'type'
+- An element of the values (= array): 'template' or 'name'
+
 |Name|Required?|Type|Description|
 |:---|:---|:---|:---|
 |-||||
 
 ***Notes: There are no arguments***
 
+Example:
+
+```text
+$ curl -i http://$address/templates/lists
+HTTP/1.1 200 OK 
+Content-Type: application/json
+
+{
+  "word": ["test2.dotx", "test1.dotx"],
+  "html": ["test3.css", "test2.css", "test1.css"]
+}
+```
 
 ### /templates
 
@@ -69,10 +86,16 @@ Post a new template file
 
 #### DELETE
 
+Delete a template file
+
 |Name|Required?|Type|Description|
 |:---|:---|:---|:---|
 |type|true|string||
 |name|true|string||
+
+### types
+
+#### GET
 
 ## License
 
