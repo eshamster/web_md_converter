@@ -44,7 +44,7 @@ Get lists of templates. Keys and values of the return value by this API are used
 
 |Name|Required?|Type|Description|
 |:---|:---|:---|:---|
-|-||||
+|-|-|-|-|
 
 ***Notes: There are no arguments***
 
@@ -93,9 +93,37 @@ Delete a template file
 |type|true|string||
 |name|true|string||
 
-### types
+### /types
 
 #### GET
+
+Get information of all supported types
+
+|Name|Required?|Type|Description|
+|:---|:---|:---|:---|
+|-|-|-|-|
+
+***Notes: There are no arguments***
+
+Example:
+
+```text
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "html": {
+    "content_type": "text/html",
+    "specifier": "html",
+    "template_content_type": "text/css"
+  },
+  "word": {
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "specifier": "docx",
+    "template_content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
+  }
+}
+```
 
 ## License
 
