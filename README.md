@@ -140,8 +140,24 @@ Delete a template file
 
 |Name|Required?|Type|Description|
 |:---|:---|:---|:---|
-|type|true|string||
-|name|true|string||
+|type|true|string|The format name. (Ex. html, word)|
+|name|true|string|The name of a registered template file.|
+
+Normal status:
+
+```text
+$ curl -i -X DELETE -F "type=html" -F "name=some_name.css" http://$address/templates
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"type":"html","name":"some_name.css"}
+```
+
+Error status: 
+
+- status 400
+  - With not supported type
+  - With not exist name
 
 ### /types
 
