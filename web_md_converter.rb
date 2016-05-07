@@ -53,11 +53,6 @@ post '/convert' do
   end
 end
 
-get '/test' do
-  manager = TypeManager::Html.new()
-  manager.content_type + ", " + manager.specifier + ", " + manager.make_pandoc_opts([])
-end
-
 # --- templates --- #
 
 get '/templates' do
