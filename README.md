@@ -111,13 +111,28 @@ table {
 
 #### POST
 
-Post a new template file
+Post a new template file.
 
 |Name|Required?|Type|Description|
 |:---|:---|:---|:---|
-|file|true|file object||
-|type|true|string||
-|name|true|string||
+|file|true|file object|The template file (multipart/form-data)|
+|type|true|string|The format name. (Ex. html, word)|
+|name|true|string|The name for register.|
+
+- normal status
+
+```text
+$ curl -i -F "file=@./temp.css" -F "type=html" -F "name=some_name.css" http://$address/templates
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"type":"html","name":"some_name.css"}
+```
+
+- error status
+
+If the name is already registered in the type, the error status 400 is returned.
+
 
 #### DELETE
 
