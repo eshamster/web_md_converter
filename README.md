@@ -17,19 +17,35 @@ TODO: Not documented
 
 ### /convert
 
-Convert a markdown file to another file by specfied format
-
 #### POST
+
+Convert a markdown file to the specfied format (with a template if needed)
 
 - arguments
 
 |Name|Required?|Type|Description|
 |:---|:---|:---|:---|
-|file|true|file object||
-|output_type|true|string||
-|template|false|string|The name of a registered template file|
+|file|true|file object|The markdown file (multipart/form-data)|
+|output_type|true|string|The format name. Valid format names are gotten by the API 'GET /types'|
+|template|false|string|The name of a registered template file. Valid names are gotten by the API 'GET /templates/lists'|
 
 - normal respons
+
+```text
+$ curl -i -F "file=@./README.md" -F "output_type=html" -F "template=sample.css" http://$address/convert
+HTTP/1.1 200 OK
+Content-Type: text/html;charset=utf-8
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  ...
+  ...
+```
 
 - error responses
 
