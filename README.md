@@ -15,13 +15,20 @@ TODO: Not documented
 
 ## API
 
+In all APIs, if some parameters are lack, the status 400 is returned with such a message as the following.
+
+```text
+HTTP/1.1 400 Bad Request 
+Content-Type: text/html;charset=utf-8
+
+Some required parameters are lack: Required = [:file, :output_type]
+```
+
 ### /convert
 
 #### POST
 
 Convert a markdown file to the specfied format (with a template if needed)
-
-- arguments
 
 |Name|Required?|Type|Description|
 |:---|:---|:---|:---|
@@ -29,7 +36,7 @@ Convert a markdown file to the specfied format (with a template if needed)
 |output_type|true|string|The format name. Valid format names are gotten by the API 'GET /types'|
 |template|false|string|The name of a registered template file. Valid names are gotten by the API 'GET /templates/lists'|
 
-- normal respons
+Normal response:
 
 ```text
 $ curl -i -F "file=@./README.md" -F "output_type=html" -F "template=sample.css" http://$address/convert
@@ -47,7 +54,11 @@ Content-Type: text/html;charset=utf-8
   ...
 ```
 
-- error responses
+Error responses:
+
+- status 400
+  - With not supported output_type
+  - (TODO: With not exist template name)
 
 ### /templates/lists
 
@@ -64,7 +75,7 @@ Get lists of templates. Keys and values of the return value by this API are used
 
 ***Notes: There are no arguments***
 
-Example:
+Normal response:
 
 ```text
 $ curl -i http://$address/templates/lists
@@ -90,7 +101,7 @@ Get a template file
 |type|true|string|The format name. (Ex. html, word)|
 |name|true|string|The name of a registered template file.|
 
-Example:
+Normal response: 
 
 ```text
 $ curl -i "http://$address/templates?type=html&name=sample.css"
@@ -109,6 +120,12 @@ table {
 ...
 ```
 
+Error responses:
+
+- status 400
+  - With not supported type
+  - With not exist name
+
 #### POST
 
 Post a new template file.
@@ -119,7 +136,7 @@ Post a new template file.
 |type|true|string|The format name. (Ex. html, word)|
 |name|true|string|The name for register.|
 
-- normal status
+Normal response: 
 
 ```text
 $ curl -i -F "file=@./temp.css" -F "type=html" -F "name=some_name.css" http://$address/templates
@@ -129,10 +146,11 @@ Content-Type: application/json
 {"type":"html","name":"some_name.css"}
 ```
 
-- error status
+Error responses:
 
-If the name is already registered in the type, the error status 400 is returned.
-
+- status 400
+  - With not supported type
+  - With already registred name in the type
 
 #### DELETE
 
@@ -143,7 +161,7 @@ Delete a template file
 |type|true|string|The format name. (Ex. html, word)|
 |name|true|string|The name of a registered template file.|
 
-Normal status:
+Normal response:
 
 ```text
 $ curl -i -X DELETE -F "type=html" -F "name=some_name.css" http://$address/templates
@@ -153,7 +171,7 @@ Content-Type: application/json
 {"type":"html","name":"some_name.css"}
 ```
 
-Error status: 
+Error responses:  
 
 - status 400
   - With not supported type
@@ -171,7 +189,7 @@ Get information of all supported types
 
 ***Notes: There are no arguments***
 
-Example:
+Normal response: 
 
 ```text
 HTTP/1.1 200 OK
