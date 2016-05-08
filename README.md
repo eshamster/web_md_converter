@@ -2,7 +2,7 @@
 
 [![Circle CI](https://circleci.com/gh/eshamster/web_md_converter.svg?style=svg)](https://circleci.com/gh/eshamster/web_md_converter)
 
-Web-Md-Converter is a markdown files converter using pandoc. This includes the templates manager.
+Web-Md-Converter is a web interface or REST APIS for converting a markdown to another format using pandoc. This includes a templates manager.
 
 ## Version information
 
