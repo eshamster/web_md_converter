@@ -61,6 +61,12 @@ module TypeManager
     end
 
     def make_pandoc_opts(params)
+      result = ""
+      if params[:template] && ! params[:template].empty?
+        path = TemplateManager::search_file_path(type: 'word', name: params[:template])
+        result += "--reference-docx=#{path}"
+      end
+      return result
     end
   end
 end
