@@ -11,7 +11,23 @@ Web-Md-Converter is a markdown files converter using pandoc. This includes the t
 
 ## Web Interface
 
-TODO: Not documented
+Installation:
+
+```bash
+$ git clone git@github.com:eshamster/web_md_converter.git
+$ cd web_md_converter
+$ bundle install
+```
+
+Start the server: 
+
+```bash
+$ ruby web_md_converter.rb
+```
+
+You can access the web interface by http://localhost:4567 via a browser
+
+![Web Interface](https://raw.githubusercontent.com/wiki/eshamster/web_md_converter/images/web_md_converter.png)
 
 ## API
 
