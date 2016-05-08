@@ -34,6 +34,10 @@ helpers do
       return nil
     end
   end
+  
+  def check_type_validation(type)
+    return create_type_manager(type)
+  end
 end
 
 post '/convert' do
@@ -47,11 +51,6 @@ post '/convert' do
     `pandoc -o #{file.path} #{type_manager.make_pandoc_opts(params)} #{f.path}`
     file.read file.size
   end
-end
-
-get '/test' do
-  manager = TypeManager::Html.new()
-  manager.content_type + ", " + manager.specifier + ", " + manager.make_pandoc_opts([])
 end
 
 # --- templates --- #
@@ -74,16 +73,13 @@ get '/templates' do
 end
 
 get '/templates/lists' do
-  result_table = {};
-  all_list = TemplateManager::get_templates_list;
-  all_list.each { |type, list|
-    result_table[type] = { "list" => list }
-  }
-  return result_table.to_json
+  content_type 'application/json'
+  return TemplateManager::get_templates_list.to_json
 end
 
 post '/templates' do
   return unless check_required_params(params, :file, :type, :name)
+  return unless check_type_validation(params[:type])
 
   file_obj = params[:file]
   unless file_obj.is_a?(Hash) && file_obj[:tempfile]
@@ -93,13 +89,13 @@ post '/templates' do
   end
   
   f = file_obj[:tempfile]
-  type_manager = create_type_manager(params[:type]) || return
 
   begin
     type = params[:type]
     name = params[:name]
     TemplateManager::add(src_path: f.path, type: type, dst_name: name)
     status 200
+    content_type 'application/json'
     { "type" => type, "name" => name }.to_json
   rescue StandardError => e
     status 400
@@ -122,6 +118,7 @@ delete '/templates' do
     name = params[:name]
     TemplateManager::delete(type: type, name: name);
     status 200
+    content_type 'application/json'
     { "type" => type, "name" => name }.to_json
   rescue StandardError => e
     status 400
@@ -133,10 +130,24 @@ delete '/templates' do
   end
 end
 
-
 # --- template lists --- #
 
 get '/template_lists' do
   "not implemented"
 end
 
+# --- types --- #
+
+get '/types' do
+  result = {}
+  TypeManager::all_supported_types.each { |type|
+    manager = TypeManager::create(type)
+    result[type] = {
+      "content_type" => manager.content_type,
+      "specifier" => manager.specifier,
+      "template_content_type" => manager.template_content_type
+    }
+  }
+  content_type 'application/json'
+  return result.to_json;
+end

@@ -61,11 +61,11 @@ class WebMdConverter_Templates < Test::Unit::TestCase
     get "templates/lists"
 
     assert last_response.ok?
+    assert_equal 'application/json', last_response.content_type
 
     res = JSON.parse(last_response.body) 
     res.each { |key, data|
       assert TypeManager::valid?(key)
-      assert ["list"].sort == data.keys.sort
     }
   end
   
@@ -74,6 +74,7 @@ class WebMdConverter_Templates < Test::Unit::TestCase
     post "templates", :file => unregistered_template_file, :type => type, :name => NOT_EXSIST_NAME
     
     assert last_response.ok?
+    assert_equal 'application/json', last_response.content_type
     assert TemplateManager::exist?(type: type, name: NOT_EXSIST_NAME)
   end
   
@@ -102,6 +103,7 @@ class WebMdConverter_Templates < Test::Unit::TestCase
     delete "templates", :type => type, :name => EXIST_NAME
     
     assert last_response.ok?
+    assert_equal 'application/json', last_response.content_type
     assert !TemplateManager::exist?(type: type, name: EXIST_NAME)
   end
 

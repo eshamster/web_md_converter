@@ -35,6 +35,12 @@
     background-color: black;
 }
 
+input[type="file"] {
+    border-radius: 2px;
+    border: 1px solid #888;
+    background-color: #efe;
+}
+
 #reporter {
     border-radius: 3px;
     margin: 5px;
